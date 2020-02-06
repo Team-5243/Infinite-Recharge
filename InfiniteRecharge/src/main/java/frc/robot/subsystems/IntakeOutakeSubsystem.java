@@ -14,13 +14,16 @@ import frc.robot.Constants;
 
 public class IntakeOutakeSubsystem extends SubsystemBase {
 
-  WPI_TalonSRX roller, conveyer, leftFly, rightFly;
+  WPI_TalonSRX roller, leftConveyor, rightConveyor, leftFly, rightFly;
   
   public IntakeOutakeSubsystem() {
     roller = new WPI_TalonSRX(Constants.BACK_LEFT);
-    conveyer = new WPI_TalonSRX(Constants.CONVEYER);
+    leftConveyor = new WPI_TalonSRX(Constants.CONVEYER); //Change later
+    rightConveyor = new WPI_TalonSRX(Constants.CONVEYER);
     leftFly = new WPI_TalonSRX(Constants.LEFT_FLY);
     rightFly = new WPI_TalonSRX(Constants.RIGHT_FLY);
+
+    rightConveyor.follow(leftConveyor);
 
     leftFly.follow(rightFly);
     rightFly.setInverted(true);
@@ -28,11 +31,11 @@ public class IntakeOutakeSubsystem extends SubsystemBase {
 
  public void intake(double inPower, double tread) {
     roller.set(inPower);
-    conveyer.set(tread);
+    leftConveyor.set(tread);
   }
   
   public void outtake(double outSpeed, double tread){
-    conveyer.set(tread);
+    leftConveyor.set(tread);
     leftFly.set(outSpeed);
     rightFly.set(outSpeed);
   }
@@ -47,7 +50,7 @@ public void stop(boolean in, boolean out) {
     rightFly.set(0);
   }
   
-  conveyer.set(0);
+  leftConveyor.set(0);
 }
 
   @Override
