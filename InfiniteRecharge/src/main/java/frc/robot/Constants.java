@@ -30,16 +30,17 @@ public final class Constants {
     public static final int BACK_RIGHT = 4;
 
     public static final int ROLLER = 5;
-    public static final int CONVEYER = 6;
+    public static final int RIGHT_CONVEYOR = 6;
+    public static final int LEFT_CONVEYOR = 7;
 
-    public static final int LEFT_FLY = 7;
-    public static final int RIGHT_FLY = 8;
+    public static final int LEFT_FLY = 8;;
+    public static final int RIGHT_FLY = 9;
 
-    public static final int LOW_CLIMB_JOINT = 9;
-    public static final int LOW_CLIMB_JOINT_2 = 13;
-    public static final int UPPER_CLIMB_JOINT = 10;
-    public static final int LEFT_WINCH_CLIMB = 11;
-    public static final int RIGHT_WINCH_CLIMB = 12;
+    public static final int LOW_CLIMB_JOINT = 10;
+    public static final int LOW_CLIMB_JOINT_2 = 11;
+    public static final int UPPER_CLIMB_JOINT = 12;
+    public static final int LEFT_WINCH_CLIMB = 13;
+    public static final int RIGHT_WINCH_CLIMB = 14;
 
     public static final double WINCH_RADIUS = 1d; //in
     public static final double WINCH_CLIMB_GEAR_RATIO = 60d; //geared for torque
