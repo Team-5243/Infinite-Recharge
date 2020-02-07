@@ -58,6 +58,9 @@ public final class Constants {
     public static final double kI_CLIMB_SYNCHRONIZE = 0d; //in / (motor power s)
     public static final double kD_CLIMB_SYNCHRONIZE = 0d; //in s / motor power
 
+    public static final double kF_LOWER_JOINT = 0.01d;
+    public static final double kF_UPPER_JOINT = 0.01d;
+
     public static final double MAX_FLYWHEEL_SPEED = 6000d; //rpm
 
     public static final DualJointedArmDynamicModel DUAL_JOINTED_ARM_DYNAMIC_MODEL = 

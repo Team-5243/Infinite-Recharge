@@ -71,6 +71,11 @@ public class DualJointedArmDynamicModel {
               (lowerBarAngularAcceleration + upperBarAngularAcceleration);
     }
 
+    public static void main(String... args) {
+        DualJointedArmDynamicModel model = new DualJointedArmDynamicModel(10d, 10d, 10d, 10d, 1d, 1d, 0.5d, 0.5d);
+        
+    }
+
     public double getLowerBarHorizontalDistanceFromCenterOfMass() {
         return lowerBarDistanceFromPivotToCenterOfMass * Math.cos(lowerBarAngle);
     }

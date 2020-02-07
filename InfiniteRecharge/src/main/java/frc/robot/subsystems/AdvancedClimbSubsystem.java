@@ -68,13 +68,14 @@ public class AdvancedClimbSubsystem extends TripleProfiledPIDSubsystem {
       rightWinch.set(winchPower - output);
     } else if(profiledPIDControllerNumber == 2) {
       if(superstructure.isClimbSafe(getLowerAngle(), getUpperAngle())) {
-        lowerJoint1.set(Constants.DUAL_JOINTED_ARM_DYNAMIC_MODEL.getLowerJointTorque(
+        //TODO: Check if angular velocity and acceleration need to derive from the trapezoidal profile instead of the empirical value
+        lowerJoint1.set(Constants.kF_LOWER_JOINT * Constants.DUAL_JOINTED_ARM_DYNAMIC_MODEL.getLowerJointTorque(
           lowerAngularVelocity, upperAngularVelocity,
           lowerAngularAcceleration, upperAngularAcceleration));
       }
     } else if(profiledPIDControllerNumber == 3) {
       if(superstructure.isClimbSafe(getLowerAngle(), getUpperAngle())) {
-        upperJoint.set(Constants.DUAL_JOINTED_ARM_DYNAMIC_MODEL.getUpperJointTorque(
+        upperJoint.set(Constants.kF_UPPER_JOINT * Constants.DUAL_JOINTED_ARM_DYNAMIC_MODEL.getUpperJointTorque(
           lowerAngularVelocity, upperAngularVelocity,
           lowerAngularAcceleration, upperAngularAcceleration));
       }
