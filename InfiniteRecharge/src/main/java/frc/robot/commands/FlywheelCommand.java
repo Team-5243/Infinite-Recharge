@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.IntakeOuttakeSubsystem;
 
 public class FlywheelCommand extends CommandBase {
-  public static IntakeOuttakeSubsystem m_IntakeOuttakeSubsystem;
+  private IntakeOuttakeSubsystem m_IntakeOuttakeSubsystem;
   /**
    * Creates a new FlywheelCommand.
    */
