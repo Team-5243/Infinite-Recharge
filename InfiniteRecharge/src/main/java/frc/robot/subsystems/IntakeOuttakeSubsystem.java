@@ -21,8 +21,8 @@ public class IntakeOuttakeSubsystem extends SubsystemBase {
   
   public IntakeOuttakeSubsystem() {
     roller = new WPI_TalonSRX(Constants.BACK_LEFT);
-    leftConveyor = new WPI_TalonSRX(Constants.CONVEYER); //Change later
-    rightConveyor = new WPI_TalonSRX(Constants.CONVEYER);
+    leftConveyor = new WPI_TalonSRX(Constants.LEFT_CONVEYOR);
+    rightConveyor = new WPI_TalonSRX(Constants.RIGHT_CONVEYOR);
     leftFly = new CANSparkMax(Constants.LEFT_FLY, MotorType.kBrushless);
     rightFly = new CANSparkMax(Constants.RIGHT_FLY, MotorType.kBrushless);
 

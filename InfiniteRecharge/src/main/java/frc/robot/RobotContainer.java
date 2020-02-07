@@ -11,8 +11,10 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.RollerCommand;
 import frc.robot.commands.FlywheelCommand;
+import frc.robot.subsystems.AdvancedClimbSubsystem;
 import frc.robot.subsystems.ClimbSubsystem;
-import frc.robot.subsystems.IntakeOutakeSubsystem;
+import frc.robot.subsystems.IntakeOuttakeSubsystem;
+import frc.robot.subsystems.Superstructure;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -25,12 +27,18 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final IntakeOutakeSubsystem m_intakeOutakeSubsystem = new IntakeOutakeSubsystem();
-  private final ClimbSubsystem        m_climbSubsystem        = new ClimbSubsystem();
 
-  private final RollerCommand m_rollerCommand = new RollerCommand(m_intakeOutakeSubsystem);
+  private final Superstructure m_superstructure = new Superstructure();
 
-  private final FlywheelCommand m_flywheelCommand = new FlywheelCommand(m_intakeOutakeSubsystem);
+  private final IntakeOuttakeSubsystem m_intakeOuttakeSubsystem = new IntakeOuttakeSubsystem();
+
+  private final AdvancedClimbSubsystem m_advancedClimbSubsystem = new AdvancedClimbSubsystem(m_superstructure);
+
+  private final ClimbSubsystem m_climbSubsystem = new ClimbSubsystem();
+
+  private final RollerCommand m_rollerCommand = new RollerCommand(m_intakeOuttakeSubsystem);
+
+  private final FlywheelCommand m_flywheelCommand = new FlywheelCommand(m_intakeOuttakeSubsystem);
 
   private final XboxController m_controller = new XboxController(Constants.CONTROLLER);
 
@@ -74,8 +82,12 @@ public class RobotContainer {
    return(m_controller);
   }
 
-  public IntakeOutakeSubsystem getIntakeOutakeSubsystem() {
-    return(m_intakeOutakeSubsystem);
+  public IntakeOuttakeSubsystem getIntakeOutakeSubsystem() {
+    return(m_intakeOuttakeSubsystem);
+  }
+
+  public AdvancedClimbSubsystem getAdvancedClimbSubsystem() {
+    return(m_advancedClimbSubsystem);
   }
 
   public RollerCommand getRollerCommand() {
