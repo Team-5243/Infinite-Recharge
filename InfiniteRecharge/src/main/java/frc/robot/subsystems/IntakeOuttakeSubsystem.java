@@ -8,31 +8,45 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class IntakeOutakeSubsystem extends SubsystemBase {
+public class IntakeOuttakeSubsystem extends SubsystemBase {
 
-  WPI_TalonSRX roller, conveyer, leftFly, rightFly;
+  WPI_TalonSRX roller, leftConveyor, rightConveyor;
+  CANSparkMax leftFly, rightFly;
   
-  public IntakeOutakeSubsystem() {
+  public IntakeOuttakeSubsystem() {
     roller = new WPI_TalonSRX(Constants.BACK_LEFT);
-    conveyer = new WPI_TalonSRX(Constants.CONVEYER);
-    leftFly = new WPI_TalonSRX(Constants.LEFT_FLY);
-    rightFly = new WPI_TalonSRX(Constants.RIGHT_FLY);
+    leftConveyor = new WPI_TalonSRX(Constants.CONVEYER); //Change later
+    rightConveyor = new WPI_TalonSRX(Constants.CONVEYER);
+    leftFly = new CANSparkMax(Constants.LEFT_FLY, MotorType.kBrushless);
+    rightFly = new CANSparkMax(Constants.RIGHT_FLY, MotorType.kBrushless);
+
+    rightConveyor.follow(leftConveyor);
 
     leftFly.follow(rightFly);
     rightFly.setInverted(true);
   }
 
+  public double getFlyWheelMeasurement() {
+    return rightFly.getEncoder().getPosition();
+  }
+
+  public double getFlyWheelVelocity() {
+    return rightFly.getEncoder().getVelocity();
+  }
+
  public void intake(double inPower, double tread) {
     roller.set(inPower);
-    conveyer.set(tread);
+    leftConveyor.set(tread);
   }
   
   public void outtake(double outSpeed, double tread){
-    conveyer.set(tread);
+    leftConveyor.set(tread);
     leftFly.set(outSpeed);
     rightFly.set(outSpeed);
   }
@@ -47,7 +61,7 @@ public void stop(boolean in, boolean out) {
     rightFly.set(0);
   }
   
-  conveyer.set(0);
+  leftConveyor.set(0);
 }
 
   @Override

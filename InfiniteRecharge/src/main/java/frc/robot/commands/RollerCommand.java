@@ -8,14 +8,14 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.IntakeOutakeSubsystem;
+import frc.robot.subsystems.IntakeOuttakeSubsystem;
 
 public class RollerCommand extends CommandBase {
-  public static IntakeOutakeSubsystem m_IntakeOutakeSubsystem;
+  public static IntakeOuttakeSubsystem m_IntakeOuttakeSubsystem;
 
-  public RollerCommand(IntakeOutakeSubsystem intakeOutakeSubsystem) {
-    m_IntakeOutakeSubsystem = intakeOutakeSubsystem;
-    addRequirements(m_IntakeOutakeSubsystem);
+  public RollerCommand(IntakeOuttakeSubsystem intakeOuttakeSubsystem) {
+    m_IntakeOuttakeSubsystem = intakeOuttakeSubsystem;
+    addRequirements(m_IntakeOuttakeSubsystem);
   }
   // Called when the command is initially scheduled.
   @Override
@@ -25,13 +25,13 @@ public class RollerCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_IntakeOutakeSubsystem.intake(1, .3);
+    m_IntakeOuttakeSubsystem.intake(1, .3);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_IntakeOutakeSubsystem.stop(true, false); 
+    m_IntakeOuttakeSubsystem.stop(true, false); 
   }
 
   // Returns true when the command should end.
