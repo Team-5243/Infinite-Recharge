@@ -5,7 +5,9 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot; 
+package frc.robot;
+
+import frc.lib.DualJointedArmDynamicModel;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -16,6 +18,8 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+    public static final double GRAVITATIONAL_ACCELERATION = 9.81d; //m/s^2
+
     public static final int NEO_ENCODER_PULSES_PER_REVOLUTION = 42;
 
     public static final int CONTROLLER = 0;
@@ -31,18 +35,28 @@ public final class Constants {
     public static final int LEFT_FLY = 7;
     public static final int RIGHT_FLY = 8;
 
-    public static final int VIRTUAL_FOUR_BAR = 9;
-    public static final int LEFT_WINCH_CLIMB = 10;
-    public static final int RIGHT_WINCH_CLIMB = 11;
+    public static final int LOW_CLIMB_JOINT = 9;
+    public static final int LOW_CLIMB_JOINT_2 = 13;
+    public static final int UPPER_CLIMB_JOINT = 10;
+    public static final int LEFT_WINCH_CLIMB = 11;
+    public static final int RIGHT_WINCH_CLIMB = 12;
 
     public static final double WINCH_RADIUS = 1d; //in
     public static final double WINCH_CLIMB_GEAR_RATIO = 60d; //geared for torque
     public static final double WINCH_CLIMB_ENCODER_PULSES_PER_REVOLUTION = NEO_ENCODER_PULSES_PER_REVOLUTION * WINCH_CLIMB_GEAR_RATIO; //enc / rev
     public static final double WINCH_CLIMB_ENCODER_PULSES_PER_INCH = WINCH_CLIMB_ENCODER_PULSES_PER_REVOLUTION / (2 * Math.PI * WINCH_RADIUS); //enc / in
 
+    public static final int CLIMB_LOWER_JOINT_ENCODER_CHANNEL_A = 0;
+    public static final int CLIMB_LOWER_JOINT_ENCODER_CHANNEL_B = 0;
+    public static final int CLIMB_UPPER_JOINT_ENCODER_CHANNEL_A = 0;
+    public static final int CLIMB_UPPER_JOINT_ENCODER_CHANNEL_B = 0;
+
     public static final double kP_CLIMB_SYNCHRONIZE = 0.001d; //in / motor power
     public static final double kI_CLIMB_SYNCHRONIZE = 0d; //in / (motor power s)
     public static final double kD_CLIMB_SYNCHRONIZE = 0d; //in s / motor power
 
     public static final double MAX_FLYWHEEL_SPEED = 6000d; //rpm
+
+    public static final DualJointedArmDynamicModel DUAL_JOINTED_ARM_DYNAMIC_MODEL = 
+        new DualJointedArmDynamicModel(0d, 0d, 0d, 0d, 0d, 0d, 0d, 0d);
 }

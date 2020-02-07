@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import frc.robot.Constants;
 
 public class ClimbSubsystem extends PIDSubsystem {
-  private CANSparkMax virtualFourBar;
+  private CANSparkMax lowerJoint, upperJoint;
   private CANSparkMax leftWinch, rightWinch;
 
   private double power;
@@ -25,18 +25,34 @@ public class ClimbSubsystem extends PIDSubsystem {
    */
   public ClimbSubsystem() {
     super(new PIDController(Constants.kP_CLIMB_SYNCHRONIZE, Constants.kI_CLIMB_SYNCHRONIZE, Constants.kD_CLIMB_SYNCHRONIZE));
-    virtualFourBar = new CANSparkMax(Constants.VIRTUAL_FOUR_BAR, MotorType.kBrushless);
+    lowerJoint = new CANSparkMax(Constants.LOW_CLIMB_JOINT, MotorType.kBrushless);
+    upperJoint = new CANSparkMax(Constants.LOW_CLIMB_JOINT, MotorType.kBrushless);
     leftWinch      = new CANSparkMax(Constants.LEFT_WINCH_CLIMB, MotorType.kBrushless);
     rightWinch     = new CANSparkMax(Constants.RIGHT_WINCH_CLIMB, MotorType.kBrushless);
     power          = 0d;
+  }
+
+  //TODO: Find proper encoder constant
+
+  public double getLowerAngle() {
+    //0.733038 = 40 deg in rad
+    return 0.733038+((lowerJoint.getEncoder().getPosition()/Constants.NEO_ENCODER_PULSES_PER_REVOLUTION)*(2*Math.PI));
+  }
+
+  public double getUpperAngle() {
+    return -getLowerAngle() + ((upperJoint.getEncoder().getPosition()/Constants.NEO_ENCODER_PULSES_PER_REVOLUTION)*(2*Math.PI));
   }
 
   public void setPower(double power) {
     this.power = power;
   }
 
-  public void runFourBar(double power) {
-    virtualFourBar.set(power);
+  public void runLowerJoint(double power) {
+    lowerJoint.set(power);
+  }
+
+  public void runUpperJoint(double power) {
+    upperJoint.set(power);
   }
 
   @Override
