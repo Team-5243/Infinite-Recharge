@@ -25,6 +25,7 @@ public class AdvancedClimbSubsystem extends TripleProfiledPIDSubsystem {
   private CANSparkMax leftWinch, rightWinch;
   private CANSparkMax lowerJoint1, lowerJoint2, upperJoint;
   private Encoder lowerJointEncoder, upperJointEncoder;
+  private Superstructure superstructure;
 
   private double winchPower;
   private double previousLowerVelocity, previousUpperVelocity;
@@ -32,7 +33,7 @@ public class AdvancedClimbSubsystem extends TripleProfiledPIDSubsystem {
   /**
    * Creates a new AdvancedClimbSubsystem.
    */
-  public AdvancedClimbSubsystem() {
+  public AdvancedClimbSubsystem(Superstructure superstructure) {
     super(new ProfiledPIDController(0, 0, 0, new TrapezoidProfile.Constraints(0, 0)),
           new ProfiledPIDController(0, 0, 0, new TrapezoidProfile.Constraints(0, 0)),
           new ProfiledPIDController(0, 0, 0, new TrapezoidProfile.Constraints(0, 0)),
@@ -42,6 +43,8 @@ public class AdvancedClimbSubsystem extends TripleProfiledPIDSubsystem {
     lowerJoint1 = new CANSparkMax(Constants.LOW_CLIMB_JOINT, MotorType.kBrushed);
     lowerJoint2 = new CANSparkMax(Constants.LOW_CLIMB_JOINT_2, MotorType.kBrushed);
     upperJoint = new CANSparkMax(Constants.UPPER_CLIMB_JOINT, MotorType.kBrushed);
+
+    this.superstructure = superstructure;
 
     lowerJointEncoder = new Encoder(Constants.CLIMB_LOWER_JOINT_ENCODER_CHANNEL_A,
         Constants.CLIMB_LOWER_JOINT_ENCODER_CHANNEL_B, false);
@@ -64,13 +67,17 @@ public class AdvancedClimbSubsystem extends TripleProfiledPIDSubsystem {
       leftWinch.set(winchPower + output);
       rightWinch.set(winchPower - output);
     } else if(profiledPIDControllerNumber == 2) {
-      lowerJoint1.set(Constants.DUAL_JOINTED_ARM_DYNAMIC_MODEL.getLowerJointTorque(
-        lowerAngularVelocity, upperAngularVelocity,
-        lowerAngularAcceleration, upperAngularAcceleration));
+      if(superstructure.isClimbSafe(getLowerAngle(), getUpperAngle())) {
+        lowerJoint1.set(Constants.DUAL_JOINTED_ARM_DYNAMIC_MODEL.getLowerJointTorque(
+          lowerAngularVelocity, upperAngularVelocity,
+          lowerAngularAcceleration, upperAngularAcceleration));
+      }
     } else if(profiledPIDControllerNumber == 3) {
-      upperJoint.set(Constants.DUAL_JOINTED_ARM_DYNAMIC_MODEL.getUpperJointTorque(
-        lowerAngularVelocity, upperAngularVelocity,
-        lowerAngularAcceleration, upperAngularAcceleration));
+      if(superstructure.isClimbSafe(getLowerAngle(), getUpperAngle())) {
+        upperJoint.set(Constants.DUAL_JOINTED_ARM_DYNAMIC_MODEL.getUpperJointTorque(
+          lowerAngularVelocity, upperAngularVelocity,
+          lowerAngularAcceleration, upperAngularAcceleration));
+      }
     }
 
     previousLowerVelocity = lowerAngularVelocity;

@@ -33,7 +33,7 @@ public final class Constants {
     public static final int RIGHT_CONVEYOR = 6;
     public static final int LEFT_CONVEYOR = 7;
 
-    public static final int LEFT_FLY = 8;;
+    public static final int LEFT_FLY = 8;
     public static final int RIGHT_FLY = 9;
 
     public static final int LOW_CLIMB_JOINT = 10;
@@ -41,6 +41,8 @@ public final class Constants {
     public static final int UPPER_CLIMB_JOINT = 12;
     public static final int LEFT_WINCH_CLIMB = 13;
     public static final int RIGHT_WINCH_CLIMB = 14;
+    public static final double LOW_CLIMB_BAR_LENGTH = 1.5; //Filler (meters)
+    public static final double UPPER_CLIMB_BAR_LENGTH = 2d; //Filler (meters)
 
     public static final double WINCH_RADIUS = 1d; //in
     public static final double WINCH_CLIMB_GEAR_RATIO = 60d; //geared for torque
