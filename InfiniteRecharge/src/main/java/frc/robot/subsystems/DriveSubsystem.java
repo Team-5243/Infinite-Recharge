@@ -7,15 +7,20 @@
 
 package frc.robot.subsystems;
 
-
+import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class DriveSubsystem extends SubsystemBase {
   CANSparkMax frontLeft, frontRight, backLeft, backRight;
+  AHRS gyro;
+  Pose2d estimatedPose;
 
   /**
    * Creates a new chassis.
@@ -28,6 +33,17 @@ public class DriveSubsystem extends SubsystemBase {
 
     backLeft.follow(frontLeft);
     backRight.follow(frontRight);
+
+    gyro = new AHRS();
+    estimatedPose = new Pose2d();
+  }
+
+  public AHRS getGyro() {
+    return gyro;
+  }
+
+  public Pose2d getPose() {
+    return estimatedPose;
   }
 
   public void setMotors(double right, double left) {
@@ -46,6 +62,11 @@ public class DriveSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    double leftVelocity = (frontLeft.getEncoder().getVelocity()/Constants.NEO_ENCODER_PULSES_PER_REVOLUTION)*
+      (Constants.DRIVE_WHEEL_CIRCUMFERENCE * Constants.DRIVETRAIN_GEAR_RATIO);
+    double rightVelocity = (frontRight.getEncoder().getVelocity()/Constants.NEO_ENCODER_PULSES_PER_REVOLUTION)*
+      (Constants.DRIVE_WHEEL_CIRCUMFERENCE * Constants.DRIVETRAIN_GEAR_RATIO);
+    Pose2d negativePoseChange = new Pose2d(new Translation2d(-(leftVelocity + rightVelocity) / 2d, 0d), new Rotation2d((leftVelocity - rightVelocity) / (2d * Constants.DRIVE_WHEEL_SEPARATION_DISTANCE)));
+    estimatedPose.minus(negativePoseChange);
   }
 }

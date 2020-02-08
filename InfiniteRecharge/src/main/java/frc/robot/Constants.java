@@ -22,6 +22,10 @@ public final class Constants {
 
     public static final int NEO_ENCODER_PULSES_PER_REVOLUTION = 42;
 
+    public static final double DRIVETRAIN_GEAR_RATIO = 10.75d;
+    public static final double DRIVE_WHEEL_CIRCUMFERENCE = 6d * Math.PI; //in
+    public static final double DRIVE_WHEEL_SEPARATION_DISTANCE = 22.375d; //in
+
     public static final int CONTROLLER = 0;
 
     public static final int FRONT_RIGHT = 1;
@@ -60,6 +64,10 @@ public final class Constants {
 
     public static final double kF_LOWER_JOINT = 0.01d;
     public static final double kF_UPPER_JOINT = 0.01d;
+
+    public static final double kP_DRIVE_STRAIGHT = 1 / 30d; //motor power / degree
+
+    public static final double kP_TURN = 1 / 30d; //motor power / degree
 
     public static final int ARM_RETRACT = 0;
     public static final int WHEEL_SPINNER = 0;
