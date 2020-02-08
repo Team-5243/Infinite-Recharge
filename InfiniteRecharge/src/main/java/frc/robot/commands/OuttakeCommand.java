@@ -29,7 +29,7 @@ public class OuttakeCommand extends PIDCommand {
         // This uses the output
         output -> {
           // Use the output here
-          subsystem.outtake(output, .3);
+          subsystem.outtake(output);
         });
     addRequirements(subsystem);
     // Use addRequirements() here to declare subsystem dependencies.

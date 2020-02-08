@@ -25,7 +25,7 @@ public class RollerCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_IntakeOuttakeSubsystem.intake(1, .3);
+    m_IntakeOuttakeSubsystem.intake(1);
   }
 
   // Called once the command ends or is interrupted.

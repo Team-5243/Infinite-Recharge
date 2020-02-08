@@ -28,7 +28,7 @@ public class FlywheelCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_IntakeOuttakeSubsystem.outtake(.7, .3);
+    m_IntakeOuttakeSubsystem.outtake(.7);
   }
 
   // Called once the command ends or is interrupted.

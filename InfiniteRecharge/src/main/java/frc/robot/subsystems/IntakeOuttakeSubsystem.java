@@ -40,13 +40,13 @@ public class IntakeOuttakeSubsystem extends SubsystemBase {
     return rightFly.getEncoder().getVelocity();
   }
 
- public void intake(double inPower, double tread) {
+ public void intake(double inPower) {
     roller.set(inPower);
-    leftConveyor.set(tread);
+    leftConveyor.set(0.3);
   }
   
-  public void outtake(double outSpeed, double tread){
-    leftConveyor.set(tread);
+  public void outtake(double outSpeed){
+    leftConveyor.set(0.3);
     leftFly.set(outSpeed);
     rightFly.set(outSpeed);
   }
