@@ -61,6 +61,9 @@ public final class Constants {
     public static final double kF_LOWER_JOINT = 0.01d;
     public static final double kF_UPPER_JOINT = 0.01d;
 
+    public static final int ARM_RETRACT = 0;
+    public static final int WHEEL_SPINNER = 0;
+
     public static final double MAX_FLYWHEEL_SPEED = 6000d; //rpm
 
     public static final DualJointedArmDynamicModel DUAL_JOINTED_ARM_DYNAMIC_MODEL = 

@@ -4,7 +4,7 @@ import frc.robot.Constants;
 
 public class Superstructure {
     private static final double MAX_BUMPER_DISTANCE = 12; //in
-    private static final double CLIMB_THRESHOLD = 2d;
+    private static final double CLIMB_THRESHOLD = 3d;
 
 
     public boolean isClimbSafe(double lowBarAngle, double upperBarAngle) {

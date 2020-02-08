@@ -23,12 +23,16 @@ public class WheelOfFortuneSubsystem extends SubsystemBase {
    * Creates a new WheelOfFortuneSubsystem.
    */
   public WheelOfFortuneSubsystem() {
-   arm = new Servo(Constants.ARM_RETRACT);
-   wheelSpin = new CANSparkMax(Constants.WHEEL_SPINNER, MotorType.kBrushless); 
+    arm = new Servo(Constants.ARM_RETRACT);
+    wheelSpin = new CANSparkMax(Constants.WHEEL_SPINNER, MotorType.kBrushless); 
   }
 
-  public void armMovement() {
-   arm.setAngle(75);
+  public void armMovement(double angle) {
+    arm.setAngle(angle); 
+  }
+
+  public void spinWheel(double power) {
+    wheelSpin.set(power);
   }
 
   @Override

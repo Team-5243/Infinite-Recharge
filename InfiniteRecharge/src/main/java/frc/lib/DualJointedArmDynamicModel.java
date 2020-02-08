@@ -73,7 +73,6 @@ public class DualJointedArmDynamicModel {
 
     public static void main(String... args) {
         DualJointedArmDynamicModel model = new DualJointedArmDynamicModel(10d, 10d, 10d, 10d, 1d, 1d, 0.5d, 0.5d);
-        
     }
 
     public double getLowerBarHorizontalDistanceFromCenterOfMass() {

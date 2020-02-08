@@ -7,27 +7,11 @@
 
 package frc.states;
 
-public class RollerStateMachine {
-    private static State state = State.IDLE;
+public class ClimbArmsStateMachine {
+    private static State state = State.INIT;
 
     public enum State {
-        IDLE(0d), RUNNING(0.5d), REVERSE(-0.5d);
-
-        final double power;
-        
-        State(double power) {
-            this.power = power;
-        }
-
-        public double getPower() {
-            return power;
-        }
-    }
-
-    public static void main(String... args) {
-        updateState(State.RUNNING);
-        //Run rollers
-        //motor.set(RollerStateMachine.getState().getPower());
+        INIT, IDLE, INTAKE, CLIMB;
     }
 
     public static void updateState(State desiredState) {
