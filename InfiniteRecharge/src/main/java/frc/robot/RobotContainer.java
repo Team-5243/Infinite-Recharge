@@ -13,13 +13,13 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.RollerCommand;
 import frc.robot.commands.FlywheelCommand;
+import frc.robot.commands.GeneralDriveCommand;
 import frc.robot.subsystems.AdvancedClimbSubsystem;
 import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeOuttakeSubsystem;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.WheelOfFortuneSubsystem;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /**
@@ -42,6 +42,8 @@ public class RobotContainer {
   private final WheelOfFortuneSubsystem m_wheelOfFortuneSubsystem = new WheelOfFortuneSubsystem();
   private final ClimbSubsystem          m_climbSubsystem          = new ClimbSubsystem();
 
+  private final GeneralDriveCommand m_generalDriveCommand = new GeneralDriveCommand(m_driveSubsystem, 
+                                    m_driveSubsystem::getDrivePower, m_driveSubsystem::getSteerPower);
   private final RollerCommand   m_rollerCommand   = new RollerCommand(m_intakeOuttakeSubsystem);
   private final FlywheelCommand m_flywheelCommand = new FlywheelCommand(m_intakeOuttakeSubsystem);
   private final XboxController  m_controller      = new XboxController(Constants.CONTROLLER);
@@ -103,6 +105,10 @@ public class RobotContainer {
 
   public RollerCommand getRollerCommand() {
     return m_rollerCommand;
+  }
+
+  public GeneralDriveCommand getGeneralDriveCommand() {
+    return m_generalDriveCommand;
   }
 }
 

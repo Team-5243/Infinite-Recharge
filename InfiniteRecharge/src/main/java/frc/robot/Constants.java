@@ -26,6 +26,9 @@ public final class Constants {
     public static final double DRIVE_WHEEL_CIRCUMFERENCE = 6d * Math.PI; //in
     public static final double DRIVE_WHEEL_SEPARATION_DISTANCE = 22.375d; //in
 
+    //---------------------------------------------------------------
+    // PORTS
+    //---------------------------------------------------------------
     public static final int CONTROLLER = 0;
 
     public static final int FRONT_RIGHT = 1;
@@ -45,6 +48,10 @@ public final class Constants {
     public static final int UPPER_CLIMB_JOINT = 12;
     public static final int LEFT_WINCH_CLIMB = 13;
     public static final int RIGHT_WINCH_CLIMB = 14;
+
+    //---------------------------------------------------------------
+    // Climb Values
+    //---------------------------------------------------------------
     public static final double LOW_CLIMB_BAR_LENGTH = 1.5; //Filler (meters)
     public static final double UPPER_CLIMB_BAR_LENGTH = 2d; //Filler (meters)
 
@@ -53,11 +60,9 @@ public final class Constants {
     public static final double WINCH_CLIMB_ENCODER_PULSES_PER_REVOLUTION = NEO_ENCODER_PULSES_PER_REVOLUTION * WINCH_CLIMB_GEAR_RATIO; //enc / rev
     public static final double WINCH_CLIMB_ENCODER_PULSES_PER_INCH = WINCH_CLIMB_ENCODER_PULSES_PER_REVOLUTION / (2 * Math.PI * WINCH_RADIUS); //enc / in
 
-    public static final int CLIMB_LOWER_JOINT_ENCODER_CHANNEL_A = 0;
-    public static final int CLIMB_LOWER_JOINT_ENCODER_CHANNEL_B = 0;
-    public static final int CLIMB_UPPER_JOINT_ENCODER_CHANNEL_A = 0;
-    public static final int CLIMB_UPPER_JOINT_ENCODER_CHANNEL_B = 0;
-
+    //---------------------------------------------------------------
+    // Tuning Constants
+    //---------------------------------------------------------------
     public static final double kP_CLIMB_SYNCHRONIZE = 0.001d; //in / motor power
     public static final double kI_CLIMB_SYNCHRONIZE = 0d; //in / (motor power s)
     public static final double kD_CLIMB_SYNCHRONIZE = 0d; //in s / motor power

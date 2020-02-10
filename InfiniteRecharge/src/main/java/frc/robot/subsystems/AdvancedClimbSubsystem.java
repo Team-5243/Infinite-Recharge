@@ -10,7 +10,6 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile.State;
@@ -23,8 +22,7 @@ import frc.robot.Constants;
  */
 public class AdvancedClimbSubsystem extends TripleProfiledPIDSubsystem {
   private CANSparkMax leftWinch, rightWinch;
-  private CANSparkMax lowerJoint1, lowerJoint2, upperJoint;
-  private Encoder lowerJointEncoder, upperJointEncoder;
+  private CANSparkMax lowerJoint, upperJoint;
   private Superstructure superstructure;
 
   private double winchPower;
@@ -40,18 +38,10 @@ public class AdvancedClimbSubsystem extends TripleProfiledPIDSubsystem {
           0d, 0d, 0d);
     leftWinch = new CANSparkMax(Constants.LEFT_WINCH_CLIMB, MotorType.kBrushless);
     rightWinch = new CANSparkMax(Constants.RIGHT_WINCH_CLIMB, MotorType.kBrushless);
-    lowerJoint1 = new CANSparkMax(Constants.LOW_CLIMB_JOINT, MotorType.kBrushed);
-    lowerJoint2 = new CANSparkMax(Constants.LOW_CLIMB_JOINT_2, MotorType.kBrushed);
+    lowerJoint = new CANSparkMax(Constants.LOW_CLIMB_JOINT, MotorType.kBrushed);
     upperJoint = new CANSparkMax(Constants.UPPER_CLIMB_JOINT, MotorType.kBrushed);
 
     this.superstructure = superstructure;
-
-    lowerJointEncoder = new Encoder(Constants.CLIMB_LOWER_JOINT_ENCODER_CHANNEL_A,
-        Constants.CLIMB_LOWER_JOINT_ENCODER_CHANNEL_B, false);
-    upperJointEncoder = new Encoder(Constants.CLIMB_UPPER_JOINT_ENCODER_CHANNEL_A,
-        Constants.CLIMB_UPPER_JOINT_ENCODER_CHANNEL_B, false);
-
-    lowerJoint2.follow(lowerJoint1);
     winchPower = 0d;
     previousLowerVelocity = 0d;
     previousUpperVelocity = 0d;
@@ -61,23 +51,22 @@ public class AdvancedClimbSubsystem extends TripleProfiledPIDSubsystem {
   protected void useOutput(int profiledPIDControllerNumber, double output, State setpoint) {
     double lowerAngularVelocity = getLowerVelocity();
     double upperAngularVelocity = getUpperVelocity();
-    double lowerAngularAcceleration = (lowerAngularVelocity - previousLowerVelocity)/200;
-    double upperAngularAcceleration = (upperAngularVelocity - previousUpperVelocity)/200;
+    double lowerAngularAcceleration = (lowerAngularVelocity - previousLowerVelocity) / 200;
+    double upperAngularAcceleration = (upperAngularVelocity - previousUpperVelocity) / 200;
     if(profiledPIDControllerNumber == 1) {
       leftWinch.set(winchPower + output);
       rightWinch.set(winchPower - output);
     } else if(profiledPIDControllerNumber == 2) {
       if(superstructure.isClimbSafe(getLowerAngle(), getUpperAngle())) {
-        //TODO: Check if angular velocity and acceleration need to derive from the trapezoidal profile instead of the empirical value
-        lowerJoint1.set(Constants.kF_LOWER_JOINT * Constants.DUAL_JOINTED_ARM_DYNAMIC_MODEL.getLowerJointTorque(
-          lowerAngularVelocity, upperAngularVelocity,
-          lowerAngularAcceleration, upperAngularAcceleration));
+        lowerJoint.set(Constants.kF_LOWER_JOINT * Constants.DUAL_JOINTED_ARM_DYNAMIC_MODEL.getLowerJointTorque(
+          setpoint.position, upperAngularVelocity,
+          setpoint.velocity, upperAngularAcceleration));
       }
     } else if(profiledPIDControllerNumber == 3) {
       if(superstructure.isClimbSafe(getLowerAngle(), getUpperAngle())) {
         upperJoint.set(Constants.kF_UPPER_JOINT * Constants.DUAL_JOINTED_ARM_DYNAMIC_MODEL.getUpperJointTorque(
-          lowerAngularVelocity, upperAngularVelocity,
-          lowerAngularAcceleration, upperAngularAcceleration));
+          lowerAngularVelocity, setpoint.position,
+          lowerAngularAcceleration, setpoint.velocity));
       }
     }
 
@@ -92,10 +81,10 @@ public class AdvancedClimbSubsystem extends TripleProfiledPIDSubsystem {
               / Constants.WINCH_CLIMB_ENCODER_PULSES_PER_INCH;
     } else if(profiledPIDControllerNumber == 2) {
       //TODO: Divide by encoder ticks per inch
-      return lowerJointEncoder.getDistance();
+      return lowerJoint.getEncoder().getPosition();
     } else if(profiledPIDControllerNumber == 3) {
       //TODO: Divide by encoder ticks per inch
-      return upperJointEncoder.getDistance();
+      return upperJoint.getEncoder().getPosition();
     }
 
     return 0;
@@ -113,11 +102,11 @@ public class AdvancedClimbSubsystem extends TripleProfiledPIDSubsystem {
 
   public double getLowerAngle() {
     //0.733038 = 40 deg in rad
-    return 0.733038+((lowerJoint1.getEncoder().getPosition()/Constants.NEO_ENCODER_PULSES_PER_REVOLUTION)*(2*Math.PI));
+    return 0.733038+((lowerJoint.getEncoder().getPosition()/Constants.NEO_ENCODER_PULSES_PER_REVOLUTION)*(2*Math.PI));
   }
 
   public double getLowerVelocity() {
-    return (lowerJoint1.getEncoder().getVelocity()/Constants.NEO_ENCODER_PULSES_PER_REVOLUTION)*(2*Math.PI);
+    return (lowerJoint.getEncoder().getVelocity()/Constants.NEO_ENCODER_PULSES_PER_REVOLUTION)*(2*Math.PI);
   }
 
   public double getUpperVelocity() {

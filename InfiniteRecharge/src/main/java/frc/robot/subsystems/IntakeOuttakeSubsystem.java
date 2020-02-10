@@ -15,7 +15,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class IntakeOuttakeSubsystem extends SubsystemBase {
-
   WPI_TalonSRX roller, leftConveyor, rightConveyor;
   CANSparkMax leftFly, rightFly;
   

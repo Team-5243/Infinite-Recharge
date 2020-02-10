@@ -88,15 +88,15 @@ public abstract class TripleProfiledPIDSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     if(m_enabled1) {
-      useOutput(1, m_controller1.calculate(getMeasurement(1)), m_goal1);
+      useOutput(1, m_controller1.calculate(getMeasurement(1), m_goal1), m_controller1.getSetpoint());
     }
 
     if(m_enabled2) {
-      useOutput(2, m_controller1.calculate(getMeasurement(2)), m_goal2);
+      useOutput(2, m_controller1.calculate(getMeasurement(2), m_goal2), m_controller2.getSetpoint());
     }
 
     if(m_enabled3) {
-      useOutput(3, m_controller1.calculate(getMeasurement(3)), m_goal3);
+      useOutput(3, m_controller1.calculate(getMeasurement(3), m_goal3), m_controller3.getSetpoint());
     }
   }
 }

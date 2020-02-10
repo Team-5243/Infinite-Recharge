@@ -22,6 +22,7 @@ public class DriveSubsystem extends SubsystemBase {
   CANSparkMax frontLeft, frontRight, backLeft, backRight;
   AHRS gyro;
   Pose2d estimatedPose;
+  Pose2d drivetrainPower;
 
   /**
    * Creates a new chassis.
@@ -37,6 +38,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     gyro = robotContainer.getGyro();
     estimatedPose = new Pose2d();
+    drivetrainPower = new Pose2d();
   }
 
   public AHRS getGyro() {
@@ -53,12 +55,29 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public void steerDrive(double drivePower, double steerPower) {
-    frontLeft.set(drivePower - steerPower);
-    frontRight.set(drivePower + steerPower);
+    setDrivetrainPower(new Pose2d(new Translation2d(drivePower, 0d), new Rotation2d(steerPower)));
+    //frontLeft.set(drivePower - steerPower);
+    //frontRight.set(drivePower + steerPower);
   }
 
   public void stopMotors() {
     setMotors(0, 0);
+  }
+
+  public Pose2d getDrivetrainPower() {
+    return drivetrainPower;
+  }
+
+  public void setDrivetrainPower(Pose2d power) {
+    drivetrainPower = power;
+  }
+
+  public double getDrivePower() {
+    return drivetrainPower.getTranslation().getX();
+  }
+
+  public double getSteerPower() {
+    return drivetrainPower.getRotation().getRadians();
   }
 
   @Override

@@ -7,27 +7,27 @@
 
 package frc.states;
 
-public class RollerStateMachine {
+public class ConveyerStateMachine {
     private static State state = State.IDLE;
 
     public enum State {
-        IDLE(0d), RUNNING(0.5d), REVERSE(-0.5d);
+        IDLE(0d, 0d), INTAKE(0.3d, 0.3d), REALIGN(0.3d, -0.3d) /*To compensate for jamming*/;
 
-        final double power;
-        
-        State(double power) {
-            this.power = power;
+        private final double leftConveyerPower;
+        private final double rightConveyerPower;
+
+        State(double leftConveyerPower, double rightConveyerPower) {
+            this.leftConveyerPower = leftConveyerPower;
+            this.rightConveyerPower = rightConveyerPower;
         }
 
-        public double getPower() {
-            return power;
+        public double getLeftConveyerPower() {
+            return leftConveyerPower;
         }
-    }
 
-    public static void main(String... args) {
-        updateState(State.RUNNING);
-        //Run rollers
-        //motor.set(RollerStateMachine.getState().getPower());
+        public double getRightConveyerPower() {
+            return rightConveyerPower;
+        }
     }
 
     public static void updateState(State desiredState) {
