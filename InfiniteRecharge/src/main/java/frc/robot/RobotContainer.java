@@ -7,14 +7,18 @@
 
 package frc.robot;
 
+import com.kauailabs.navx.frc.AHRS;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.RollerCommand;
 import frc.robot.commands.FlywheelCommand;
 import frc.robot.subsystems.AdvancedClimbSubsystem;
 import frc.robot.subsystems.ClimbSubsystem;
+import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeOuttakeSubsystem;
 import frc.robot.subsystems.Superstructure;
+import frc.robot.subsystems.WheelOfFortuneSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -28,19 +32,19 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
 
+  private final AHRS m_gyro = new AHRS();
+
   private final Superstructure m_superstructure = new Superstructure();
+  
+  private final IntakeOuttakeSubsystem  m_intakeOuttakeSubsystem  = new IntakeOuttakeSubsystem();
+  private final AdvancedClimbSubsystem  m_advancedClimbSubsystem  = new AdvancedClimbSubsystem(m_superstructure);
+  private final DriveSubsystem          m_driveSubsystem          = new DriveSubsystem(this);
+  private final WheelOfFortuneSubsystem m_wheelOfFortuneSubsystem = new WheelOfFortuneSubsystem();
+  private final ClimbSubsystem          m_climbSubsystem          = new ClimbSubsystem();
 
-  private final IntakeOuttakeSubsystem m_intakeOuttakeSubsystem = new IntakeOuttakeSubsystem();
-
-  private final AdvancedClimbSubsystem m_advancedClimbSubsystem = new AdvancedClimbSubsystem(m_superstructure);
-
-  private final ClimbSubsystem m_climbSubsystem = new ClimbSubsystem();
-
-  private final RollerCommand m_rollerCommand = new RollerCommand(m_intakeOuttakeSubsystem);
-
+  private final RollerCommand   m_rollerCommand   = new RollerCommand(m_intakeOuttakeSubsystem);
   private final FlywheelCommand m_flywheelCommand = new FlywheelCommand(m_intakeOuttakeSubsystem);
-
-  private final XboxController m_controller = new XboxController(Constants.CONTROLLER);
+  private final XboxController  m_controller      = new XboxController(Constants.CONTROLLER);
 
   JoystickButton aButton = new JoystickButton(m_controller, 1);
   JoystickButton bButton = new JoystickButton(m_controller, 2);
@@ -51,10 +55,6 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
-  }
-
-  public FlywheelCommand getM_flywheelCommand() {
-    return m_flywheelCommand;
   }
 
   /**
@@ -68,30 +68,41 @@ public class RobotContainer {
     bButton.whenPressed(m_climbSubsystem::switchEnable);
   }
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-  public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
-    return null;//(m_autoCommand);
+  
+  public AHRS getGyro() {
+    return(m_gyro);
+  }
+
+  public Superstructure getSuperstructure() {
+    return m_superstructure;
   }
   
   public XboxController getController() {
-   return(m_controller);
+    return m_controller;
   }
 
   public IntakeOuttakeSubsystem getIntakeOutakeSubsystem() {
-    return(m_intakeOuttakeSubsystem);
+    return m_intakeOuttakeSubsystem;
+  }
+
+  public DriveSubsystem getDriveSubsystem() {
+    return m_driveSubsystem;
+  }
+
+  public WheelOfFortuneSubsystem getWheelOfFortuneSubsystem(){
+    return m_wheelOfFortuneSubsystem;
   }
 
   public AdvancedClimbSubsystem getAdvancedClimbSubsystem() {
-    return(m_advancedClimbSubsystem);
+    return m_advancedClimbSubsystem;
+  }
+
+  public FlywheelCommand getFlyWheelCommand() {
+    return m_flywheelCommand;
   }
 
   public RollerCommand getRollerCommand() {
-    return(m_rollerCommand);
+    return m_rollerCommand;
   }
 }
 

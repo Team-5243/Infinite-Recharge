@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 
 public class DriveSubsystem extends SubsystemBase {
   CANSparkMax frontLeft, frontRight, backLeft, backRight;
@@ -25,7 +26,7 @@ public class DriveSubsystem extends SubsystemBase {
   /**
    * Creates a new chassis.
    */
-  public DriveSubsystem() {
+  public DriveSubsystem(RobotContainer robotContainer) {
     frontLeft = new CANSparkMax(Constants.FRONT_LEFT, MotorType.kBrushless);
     backLeft = new CANSparkMax(Constants.BACK_LEFT, MotorType.kBrushless);
     frontRight = new CANSparkMax(Constants.FRONT_RIGHT, MotorType.kBrushless);
@@ -34,7 +35,7 @@ public class DriveSubsystem extends SubsystemBase {
     backLeft.follow(frontLeft);
     backRight.follow(frontRight);
 
-    gyro = new AHRS();
+    gyro = robotContainer.getGyro();
     estimatedPose = new Pose2d();
   }
 
