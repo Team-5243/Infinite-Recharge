@@ -1,13 +1,20 @@
 package frc.lib;
 
-public class CurvePoint{
+import edu.wpi.first.wpilibj.geometry.Translation2d;
+
+public class CurvePoint {
     private double x, y;
     private double lookAheadDistance;
 
-    CurvePoint(double x, double y, double r) {
+    public CurvePoint(double x, double y, double r) {
         this.x = x;
         this.y = y;
         lookAheadDistance = r;
+    }
+
+    public CurvePoint(Translation2d translation) {
+        x = translation.getX();
+        y = translation.getY();
     }
 
     public double getXCoordinate() {

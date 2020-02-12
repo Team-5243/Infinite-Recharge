@@ -17,7 +17,7 @@ import frc.robot.subsystems.DriveSubsystem;
  */
 public class PurePursuitCalculator {
 
-    public Translation2d getVector(final CurvePoint targetPoint, final CurvePoint previousPoint) {
+    public static Translation2d getVector(final CurvePoint targetPoint, final CurvePoint previousPoint) {
         final DriveSubsystem driveSubsystem = Robot.getRobotContainer().getDriveSubsystem();
 
         final Translation2d robotVector = driveSubsystem.getPose().getTranslation();
@@ -32,6 +32,8 @@ public class PurePursuitCalculator {
         final double heading = Math.toRadians(driveSubsystem.getGyro().getYaw());
 
         Translation2d robotPower = powerVector.rotateBy(new Rotation2d(heading));
+
+        robotPower.div(robotPower.getX()+robotPower.getY());
         
         return robotPower;
     }
