@@ -31,23 +31,22 @@ public final class Constants {
     //---------------------------------------------------------------
     public static final int CONTROLLER = 0;
 
-    public static final int FRONT_RIGHT = 1;
-    public static final int FRONT_LEFT = 2;
-    public static final int BACK_LEFT = 3;
-    public static final int BACK_RIGHT = 4;
+    public static final int FRONT_RIGHT = 14;
+    public static final int FRONT_LEFT = 1;
+    public static final int BACK_LEFT = 2;
+    public static final int BACK_RIGHT = 13;
 
-    public static final int ROLLER = 5;
-    public static final int RIGHT_CONVEYOR = 6;
-    public static final int LEFT_CONVEYOR = 7;
+    public static final int ROLLER = 9;
+    public static final int RIGHT_CONVEYOR = 11;
+    public static final int LEFT_CONVEYOR = 4;
 
     public static final int LEFT_FLY = 8;
     public static final int RIGHT_FLY = 9;
 
-    public static final int LOW_CLIMB_JOINT = 10;
-    public static final int LOW_CLIMB_JOINT_2 = 11;
-    public static final int UPPER_CLIMB_JOINT = 12;
-    public static final int LEFT_WINCH_CLIMB = 13;
-    public static final int RIGHT_WINCH_CLIMB = 14;
+    public static final int LOW_CLIMB_JOINT = 12;
+    public static final int UPPER_CLIMB_JOINT = 7;
+    public static final int UPPER_WINCH_CLIMB = 15;
+    public static final int LOWER_WINCH_CLIMB = 3;
 
     //---------------------------------------------------------------
     // Climb Values

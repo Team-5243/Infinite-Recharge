@@ -16,7 +16,7 @@ import frc.robot.Constants;
 
 public class ClimbSubsystem extends PIDSubsystem {
   private CANSparkMax lowerJoint, upperJoint;
-  private CANSparkMax leftWinch, rightWinch;
+  private CANSparkMax upperWinch, lowerWinch;
 
   private double power;
 
@@ -27,8 +27,8 @@ public class ClimbSubsystem extends PIDSubsystem {
     super(new PIDController(Constants.kP_CLIMB_SYNCHRONIZE, Constants.kI_CLIMB_SYNCHRONIZE, Constants.kD_CLIMB_SYNCHRONIZE));
     lowerJoint = new CANSparkMax(Constants.LOW_CLIMB_JOINT, MotorType.kBrushless);
     upperJoint = new CANSparkMax(Constants.LOW_CLIMB_JOINT, MotorType.kBrushless);
-    leftWinch      = new CANSparkMax(Constants.LEFT_WINCH_CLIMB, MotorType.kBrushless);
-    rightWinch     = new CANSparkMax(Constants.RIGHT_WINCH_CLIMB, MotorType.kBrushless);
+    upperWinch     = new CANSparkMax(Constants.UPPER_WINCH_CLIMB, MotorType.kBrushless);
+    lowerWinch     = new CANSparkMax(Constants.LOWER_WINCH_CLIMB, MotorType.kBrushless);
     power          = 0d;
   }
 
@@ -57,13 +57,13 @@ public class ClimbSubsystem extends PIDSubsystem {
 
   @Override
   public void useOutput(double output, double setpoint) {
-    leftWinch.set(power + output);
-    rightWinch.set(power - output);
+    lowerWinch.set(power + output);
+    upperWinch.set(power - output);
   }
 
   @Override
   public double getMeasurement() {
-    return (rightWinch.getEncoder().getPosition() - leftWinch.getEncoder().getPosition()) / Constants.WINCH_CLIMB_ENCODER_PULSES_PER_INCH;
+    return (upperWinch.getEncoder().getPosition() - lowerWinch.getEncoder().getPosition()) / Constants.WINCH_CLIMB_ENCODER_PULSES_PER_INCH;
   }
 
   public void switchEnable() {

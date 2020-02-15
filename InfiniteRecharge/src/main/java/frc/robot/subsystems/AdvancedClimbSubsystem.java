@@ -21,7 +21,7 @@ import frc.robot.Constants;
  * the lower joint motors, and the third ProfiledPIDController runs the upper joint.
  */
 public class AdvancedClimbSubsystem extends TripleProfiledPIDSubsystem {
-  private CANSparkMax leftWinch, rightWinch;
+  private CANSparkMax upperWinch, lowerWinch;
   private CANSparkMax lowerJoint, upperJoint;
   private Superstructure superstructure;
 
@@ -36,8 +36,8 @@ public class AdvancedClimbSubsystem extends TripleProfiledPIDSubsystem {
           new ProfiledPIDController(0, 0, 0, new TrapezoidProfile.Constraints(0, 0)),
           new ProfiledPIDController(0, 0, 0, new TrapezoidProfile.Constraints(0, 0)),
           0d, 0d, 0d);
-    leftWinch = new CANSparkMax(Constants.LEFT_WINCH_CLIMB, MotorType.kBrushless);
-    rightWinch = new CANSparkMax(Constants.RIGHT_WINCH_CLIMB, MotorType.kBrushless);
+    upperWinch = new CANSparkMax(Constants.UPPER_WINCH_CLIMB, MotorType.kBrushless);
+    lowerWinch = new CANSparkMax(Constants.LOWER_WINCH_CLIMB, MotorType.kBrushless);
     lowerJoint = new CANSparkMax(Constants.LOW_CLIMB_JOINT, MotorType.kBrushed);
     upperJoint = new CANSparkMax(Constants.UPPER_CLIMB_JOINT, MotorType.kBrushed);
 
@@ -54,8 +54,8 @@ public class AdvancedClimbSubsystem extends TripleProfiledPIDSubsystem {
     double lowerAngularAcceleration = (lowerAngularVelocity - previousLowerVelocity) / 200;
     double upperAngularAcceleration = (upperAngularVelocity - previousUpperVelocity) / 200;
     if(profiledPIDControllerNumber == 1) {
-      leftWinch.set(winchPower + output);
-      rightWinch.set(winchPower - output);
+      upperWinch.set(winchPower + output);
+      lowerWinch.set(winchPower - output);
     } else if(profiledPIDControllerNumber == 2) {
       if(superstructure.isClimbSafe(getLowerAngle(), getUpperAngle())) {
         lowerJoint.set(Constants.kF_LOWER_JOINT * Constants.DUAL_JOINTED_ARM_DYNAMIC_MODEL.getLowerJointTorque(
@@ -77,11 +77,12 @@ public class AdvancedClimbSubsystem extends TripleProfiledPIDSubsystem {
   @Override
   protected double getMeasurement(int profiledPIDControllerNumber) {
     if(profiledPIDControllerNumber == 1) {
-      return (rightWinch.getEncoder().getPosition() - leftWinch.getEncoder().getPosition()) 
+      return (lowerWinch.getEncoder().getPosition() - upperWinch.getEncoder().getPosition()) 
               / Constants.WINCH_CLIMB_ENCODER_PULSES_PER_INCH;
     } else if(profiledPIDControllerNumber == 2) {
       //TODO: Divide by encoder ticks per inch
       return lowerJoint.getEncoder().getPosition();
+      
     } else if(profiledPIDControllerNumber == 3) {
       //TODO: Divide by encoder ticks per inch
       return upperJoint.getEncoder().getPosition();
