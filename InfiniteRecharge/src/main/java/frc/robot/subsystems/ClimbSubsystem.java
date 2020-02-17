@@ -24,9 +24,9 @@ public class ClimbSubsystem extends PIDSubsystem {
    * Creates a new ClimbSubsystem.
    */
   public ClimbSubsystem() {
-    super(new PIDController(Constants.kP_CLIMB_SYNCHRONIZE, Constants.kI_CLIMB_SYNCHRONIZE, Constants.kD_CLIMB_SYNCHRONIZE));
-    lowerJoint = new CANSparkMax(Constants.LOW_CLIMB_JOINT, MotorType.kBrushless);
-    upperJoint = new CANSparkMax(Constants.LOW_CLIMB_JOINT, MotorType.kBrushless);
+    super(new PIDController(Constants.kP_CLIMB_WINCH_SYNCHRONIZE, Constants.kI_CLIMB_WINCH_SYNCHRONIZE, Constants.kD_CLIMB_WINCH_SYNCHRONIZE));
+    lowerJoint = new CANSparkMax(Constants.LOWER_CLIMB_JOINT, MotorType.kBrushless);
+    upperJoint = new CANSparkMax(Constants.LOWER_CLIMB_JOINT, MotorType.kBrushless);
     upperWinch     = new CANSparkMax(Constants.UPPER_WINCH_CLIMB, MotorType.kBrushless);
     lowerWinch     = new CANSparkMax(Constants.LOWER_WINCH_CLIMB, MotorType.kBrushless);
     power          = 0d;

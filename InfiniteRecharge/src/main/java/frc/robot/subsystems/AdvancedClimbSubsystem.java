@@ -38,7 +38,7 @@ public class AdvancedClimbSubsystem extends TripleProfiledPIDSubsystem {
           0d, 0d, 0d);
     upperWinch = new CANSparkMax(Constants.UPPER_WINCH_CLIMB, MotorType.kBrushless);
     lowerWinch = new CANSparkMax(Constants.LOWER_WINCH_CLIMB, MotorType.kBrushless);
-    lowerJoint = new CANSparkMax(Constants.LOW_CLIMB_JOINT, MotorType.kBrushed);
+    lowerJoint = new CANSparkMax(Constants.LOWER_CLIMB_JOINT, MotorType.kBrushed);
     upperJoint = new CANSparkMax(Constants.UPPER_CLIMB_JOINT, MotorType.kBrushed);
 
     this.superstructure = superstructure;
@@ -58,13 +58,13 @@ public class AdvancedClimbSubsystem extends TripleProfiledPIDSubsystem {
       lowerWinch.set(winchPower - output);
     } else if(profiledPIDControllerNumber == 2) {
       if(superstructure.isClimbSafe(getLowerAngle(), getUpperAngle())) {
-        lowerJoint.set(Constants.kF_LOWER_JOINT * Constants.DUAL_JOINTED_ARM_DYNAMIC_MODEL.getLowerJointTorque(
+        lowerJoint.set(Constants.kF_CLIMB_LOWER_BAR * Constants.DUAL_JOINTED_ARM_DYNAMIC_MODEL.getLowerJointTorque(
           setpoint.position, upperAngularVelocity,
           setpoint.velocity, upperAngularAcceleration));
       }
     } else if(profiledPIDControllerNumber == 3) {
       if(superstructure.isClimbSafe(getLowerAngle(), getUpperAngle())) {
-        upperJoint.set(Constants.kF_UPPER_JOINT * Constants.DUAL_JOINTED_ARM_DYNAMIC_MODEL.getUpperJointTorque(
+        upperJoint.set(Constants.kF_CLIMB_UPPER_BAR * Constants.DUAL_JOINTED_ARM_DYNAMIC_MODEL.getUpperJointTorque(
           lowerAngularVelocity, setpoint.position,
           lowerAngularAcceleration, setpoint.velocity));
       }
@@ -103,7 +103,7 @@ public class AdvancedClimbSubsystem extends TripleProfiledPIDSubsystem {
 
   public double getLowerAngle() {
     //0.733038 = 40 deg in rad
-    return 0.733038+((lowerJoint.getEncoder().getPosition()/Constants.NEO_ENCODER_PULSES_PER_REVOLUTION)*(2*Math.PI));
+    return Math.toRadians(40d)+((lowerJoint.getEncoder().getPosition()/Constants.NEO_ENCODER_PULSES_PER_REVOLUTION)*(2*Math.PI));
   }
 
   public double getLowerVelocity() {
