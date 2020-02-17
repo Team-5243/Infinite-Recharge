@@ -68,6 +68,11 @@ public class DriveSubsystem extends SubsystemBase {
     return drivetrainPower;
   }
 
+  public double getLeftDisplacement() {
+    return frontLeft.getEncoder().getPosition() / Constants.NEO_ENCODER_PULSES_PER_REVOLUTION*
+      (Constants.DRIVE_WHEEL_CIRCUMFERENCE * Constants.DRIVETRAIN_GEAR_RATIO);
+  }
+
   public void setDrivetrainPower(Pose2d power) {
     drivetrainPower = power;
   }

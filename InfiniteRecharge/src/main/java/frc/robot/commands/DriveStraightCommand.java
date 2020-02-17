@@ -1,10 +1,3 @@
-/*----------------------------------------------------------------------------*/
-/* Copyright (c) 2019 FIRST. All Rights Reserved.                             */
-/* Open Source Software - may be modified and shared by FRC teams. The code   */
-/* must be accompanied by the FIRST BSD license file in the root directory of */
-/* the project.                                                               */
-/*----------------------------------------------------------------------------*/
-
 package frc.robot.commands;
 
 import com.kauailabs.navx.frc.AHRS;
@@ -25,24 +18,24 @@ public class DriveStraightCommand extends CommandBase {
    */
   public DriveStraightCommand(DriveSubsystem subsystem, double power, double distance) {
     m_driveSubsystem         = subsystem;
-    m_gyro                   = m_driveSubsystem.getGyro();
-    m_initialHeading         = m_gyro.getYaw(); //in deg
     m_power                  = power;
     m_distance               = distance;
-    m_initialLateralPosition = m_driveSubsystem.getPose().getTranslation().getX();
-    
+    //getPose().getTranslation().getX();
     addRequirements(m_driveSubsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    m_initialLateralPosition = m_driveSubsystem.getLeftDisplacement();
+    m_gyro                   = m_driveSubsystem.getGyro();
+    m_initialHeading         = m_gyro.getAngle(); //in deg
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double heading      = m_gyro.getYaw();
+    double heading      = m_gyro.getAngle();
     double headingError = m_initialHeading - heading;
     m_driveSubsystem.steerDrive(m_power, Constants.kP_DRIVE_STRAIGHT * headingError);   
   }
@@ -56,6 +49,6 @@ public class DriveStraightCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (m_driveSubsystem.getPose().getTranslation().getX() - m_initialLateralPosition) >= m_distance;
+    return (m_driveSubsystem.getLeftDisplacement()/*getPose().getTranslation().getX()*/ - m_initialLateralPosition) >= m_distance;
   }
 }

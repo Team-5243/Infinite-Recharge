@@ -12,6 +12,7 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.RollerCommand;
+import frc.lib.ConvertedXboxController;
 import frc.robot.commands.FlywheelCommand;
 import frc.robot.commands.GeneralDriveCommand;
 import frc.robot.subsystems.AdvancedClimbSubsystem;
@@ -31,6 +32,9 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
+
+  private final ConvertedXboxController driverController = new ConvertedXboxController(Constants.CONTROLLER);
+  private final ConvertedXboxController mechanismController = new ConvertedXboxController(1); //TODO: Make this in constants
 
   private final AHRS m_gyro = new AHRS();
 

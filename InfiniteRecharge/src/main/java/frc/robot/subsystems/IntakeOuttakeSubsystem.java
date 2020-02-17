@@ -25,8 +25,6 @@ public class IntakeOuttakeSubsystem extends SubsystemBase {
     leftFly = new CANSparkMax(Constants.LEFT_FLY, MotorType.kBrushless);
     rightFly = new CANSparkMax(Constants.RIGHT_FLY, MotorType.kBrushless);
 
-    rightConveyor.follow(leftConveyor);
-
     leftFly.follow(rightFly);
     rightFly.setInverted(true);
   }
@@ -39,13 +37,19 @@ public class IntakeOuttakeSubsystem extends SubsystemBase {
     return rightFly.getEncoder().getVelocity();
   }
 
- public void intake(double inPower) {
-    roller.set(inPower);
-    leftConveyor.set(0.3);
+  public void runConveyor(double leftPower, double rightPower) {
+    leftConveyor.set(leftPower);
+    rightConveyor.set(rightPower);
+  }
+
+  public void intake(double inPower) {
+      roller.set(inPower);
   }
   
   public void outtake(double outSpeed){
     leftConveyor.set(0.3);
+    rightConveyor.set(0.3);
+
     leftFly.set(outSpeed);
     rightFly.set(outSpeed);
   }
@@ -61,6 +65,7 @@ public void stop(boolean in, boolean out) {
   }
   
   leftConveyor.set(0);
+  rightConveyor.set(0);
 }
 
   @Override
