@@ -40,16 +40,16 @@ public class RobotContainer {
 
   private final Superstructure m_superstructure = new Superstructure();
   
-  private final IntakeOuttakeSubsystem  m_intakeOuttakeSubsystem  = new IntakeOuttakeSubsystem();
-  private final AdvancedClimbSubsystem  m_advancedClimbSubsystem  = new AdvancedClimbSubsystem(m_superstructure);
+  //private final IntakeOuttakeSubsystem  m_intakeOuttakeSubsystem  = new IntakeOuttakeSubsystem();
+  //private final AdvancedClimbSubsystem  m_advancedClimbSubsystem  = new AdvancedClimbSubsystem(m_superstructure);
   private final DriveSubsystem          m_driveSubsystem          = new DriveSubsystem(this);
-  private final WheelOfFortuneSubsystem m_wheelOfFortuneSubsystem = new WheelOfFortuneSubsystem();
-  private final ClimbSubsystem          m_climbSubsystem          = new ClimbSubsystem();
+  //private final WheelOfFortuneSubsystem m_wheelOfFortuneSubsystem = new WheelOfFortuneSubsystem();
+  //private final ClimbSubsystem          m_climbSubsystem          = new ClimbSubsystem();
 
   private final GeneralDriveCommand m_generalDriveCommand = new GeneralDriveCommand(m_driveSubsystem, 
                                     m_driveSubsystem::getDrivePower, m_driveSubsystem::getSteerPower);
-  private final RollerCommand   m_rollerCommand   = new RollerCommand(m_intakeOuttakeSubsystem);
-  private final FlywheelCommand m_flywheelCommand = new FlywheelCommand(m_intakeOuttakeSubsystem);
+  //private final RollerCommand   m_rollerCommand   = new RollerCommand(m_intakeOuttakeSubsystem);
+  //private final FlywheelCommand m_flywheelCommand = new FlywheelCommand(m_intakeOuttakeSubsystem);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -66,8 +66,8 @@ public class RobotContainer {
    * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    m_mechanismController.aButton.toggleWhenPressed(m_rollerCommand);
-    m_mechanismController.bButton.whenPressed(m_climbSubsystem::switchEnable);
+    //m_mechanismController.aButton.toggleWhenPressed(m_rollerCommand);
+    //m_mechanismController.bButton.whenPressed(m_climbSubsystem::switchEnable);
   }
 
   
@@ -88,7 +88,7 @@ public class RobotContainer {
   }
 
   public IntakeOuttakeSubsystem getIntakeOutakeSubsystem() {
-    return m_intakeOuttakeSubsystem;
+    return null;//m_intakeOuttakeSubsystem;
   }
 
   public DriveSubsystem getDriveSubsystem() {
@@ -96,19 +96,19 @@ public class RobotContainer {
   }
 
   public WheelOfFortuneSubsystem getWheelOfFortuneSubsystem(){
-    return m_wheelOfFortuneSubsystem;
+    return null; //m_wheelOfFortuneSubsystem;
   }
 
   public AdvancedClimbSubsystem getAdvancedClimbSubsystem() {
-    return m_advancedClimbSubsystem;
+    return null; //m_advancedClimbSubsystem;
   }
 
   public FlywheelCommand getFlyWheelCommand() {
-    return m_flywheelCommand;
+    return null; //m_flywheelCommand;
   }
 
   public RollerCommand getRollerCommand() {
-    return m_rollerCommand;
+    return null; //m_rollerCommand;
   }
 
   public GeneralDriveCommand getGeneralDriveCommand() {
