@@ -41,7 +41,8 @@ public final class Constants {
     //---------------------------------------------------------------
     // Ports
     //---------------------------------------------------------------
-    public static final int CONTROLLER = 0;
+    public static final int DRIVER_CONTROLLER = 0;
+    public static final int MECHANISM_CONTROLLER = 1;
 
     //---------------------------------------------------------------
     // Drive Ports

@@ -33,8 +33,8 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
 
-  private final ConvertedXboxController driverController = new ConvertedXboxController(Constants.CONTROLLER);
-  private final ConvertedXboxController mechanismController = new ConvertedXboxController(1); //TODO: Make this in constants
+  private final ConvertedXboxController m_driverController = new ConvertedXboxController(Constants.DRIVER_CONTROLLER);
+  private final ConvertedXboxController m_mechanismController = new ConvertedXboxController(Constants.MECHANISM_CONTROLLER);
 
   private final AHRS m_gyro = new AHRS();
 
@@ -50,10 +50,6 @@ public class RobotContainer {
                                     m_driveSubsystem::getDrivePower, m_driveSubsystem::getSteerPower);
   private final RollerCommand   m_rollerCommand   = new RollerCommand(m_intakeOuttakeSubsystem);
   private final FlywheelCommand m_flywheelCommand = new FlywheelCommand(m_intakeOuttakeSubsystem);
-  private final XboxController  m_controller      = new XboxController(Constants.CONTROLLER);
-
-  JoystickButton aButton = new JoystickButton(m_controller, 1);
-  JoystickButton bButton = new JoystickButton(m_controller, 2);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -70,8 +66,8 @@ public class RobotContainer {
    * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    aButton.toggleWhenPressed(m_rollerCommand);
-    bButton.whenPressed(m_climbSubsystem::switchEnable);
+    m_mechanismController.aButton.toggleWhenPressed(m_rollerCommand);
+    m_mechanismController.bButton.whenPressed(m_climbSubsystem::switchEnable);
   }
 
   
@@ -83,8 +79,12 @@ public class RobotContainer {
     return m_superstructure;
   }
   
-  public XboxController getController() {
-    return m_controller;
+  public ConvertedXboxController getDriverController() {
+    return m_driverController;
+  }
+
+  public ConvertedXboxController getMechanismController() {
+    return m_mechanismController;
   }
 
   public IntakeOuttakeSubsystem getIntakeOutakeSubsystem() {
