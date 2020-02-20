@@ -47,10 +47,10 @@ public final class Constants {
     //---------------------------------------------------------------
     // Drive Ports
     //---------------------------------------------------------------
-    public static final int FRONT_RIGHT = 14;
-    public static final int FRONT_LEFT = 1;
+    public static final int FRONT_RIGHT = 4;
+    public static final int FRONT_LEFT = 3;
     public static final int BACK_LEFT = 2;
-    public static final int BACK_RIGHT = 13;
+    public static final int BACK_RIGHT = 1;
 
     //---------------------------------------------------------------
     // Intake Ports
@@ -68,8 +68,8 @@ public final class Constants {
     //---------------------------------------------------------------
     // Climb Ports
     //---------------------------------------------------------------
-    public static final int LOWER_CLIMB_JOINT = 12;
-    public static final int UPPER_CLIMB_JOINT = 7;
+    public static final int LOWER_CLIMB_JOINT = 5;
+    public static final int UPPER_CLIMB_JOINT = 6;
     public static final int UPPER_WINCH_CLIMB = 15;
     public static final int LOWER_WINCH_CLIMB = 3;
 

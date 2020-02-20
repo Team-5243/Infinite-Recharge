@@ -8,6 +8,7 @@
 package frc.lib;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /**
@@ -15,8 +16,11 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
  */
 public class ConvertedXboxController extends Joystick {
 
+    XboxController m_xboxController;
+
     public ConvertedXboxController(int port) {
         super(port);
+        m_xboxController = new XboxController(port);
     }
 
     public JoystickButton xButton = new JoystickButton(this, 3);
@@ -49,5 +53,9 @@ public class ConvertedXboxController extends Joystick {
 
     public boolean isDpadRight() {
         return (getDpadValue() <= 360 && getDpadValue() > 315) || (getDpadValue() >= 0 && getDpadValue() < 45);
+    }
+
+    public XboxController getXboxController() {
+        return m_xboxController;
     }
 }

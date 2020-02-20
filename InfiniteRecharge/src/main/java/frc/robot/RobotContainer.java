@@ -11,16 +11,22 @@ import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import frc.robot.commands.RollerCommand;
 import frc.lib.ConvertedXboxController;
+import frc.robot.commands.DriveCommand;
 import frc.robot.commands.FlywheelCommand;
 import frc.robot.commands.GeneralDriveCommand;
+import frc.robot.commands.ManualJointCommand;
+import frc.robot.commands.ManualLowerJointCommand;
+import frc.robot.commands.ManualUpperJointCommand;
 import frc.robot.subsystems.AdvancedClimbSubsystem;
 import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeOuttakeSubsystem;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.WheelOfFortuneSubsystem;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /**
@@ -44,13 +50,18 @@ public class RobotContainer {
   //private final AdvancedClimbSubsystem  m_advancedClimbSubsystem  = new AdvancedClimbSubsystem(m_superstructure);
   private final DriveSubsystem          m_driveSubsystem          = new DriveSubsystem(this);
   //private final WheelOfFortuneSubsystem m_wheelOfFortuneSubsystem = new WheelOfFortuneSubsystem();
-  //private final ClimbSubsystem          m_climbSubsystem          = new ClimbSubsystem();
+  private final ClimbSubsystem          m_climbSubsystem          = new ClimbSubsystem();
 
   private final GeneralDriveCommand m_generalDriveCommand = new GeneralDriveCommand(m_driveSubsystem, 
                                     m_driveSubsystem::getDrivePower, m_driveSubsystem::getSteerPower);
+  private final DriveCommand m_driveCommand = new DriveCommand(m_driveSubsystem, m_driverController.getXboxController());
+
+  private final ManualJointCommand m_manualJointCommand = new ManualJointCommand(m_climbSubsystem, m_driverController.getXboxController());
+
+  // private final ManualLowerJointCommand m_lowerJointCommand = new ManualLowerJointCommand(m_climbSubsystem, () -> m_driverController.getXboxController().getTriggerAxis(Hand.kRight));
+  // private final ManualUpperJointCommand m_upperJointCommand = new ManualUpperJointCommand(m_climbSubsystem, () -> m_driverController.getXboxController().getTriggerAxis(Hand.kLeft));
   //private final RollerCommand   m_rollerCommand   = new RollerCommand(m_intakeOuttakeSubsystem);
   //private final FlywheelCommand m_flywheelCommand = new FlywheelCommand(m_intakeOuttakeSubsystem);
-
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -68,8 +79,12 @@ public class RobotContainer {
   private void configureButtonBindings() {
     //m_mechanismController.aButton.toggleWhenPressed(m_rollerCommand);
     //m_mechanismController.bButton.whenPressed(m_climbSubsystem::switchEnable);
+    
   }
 
+  public ManualJointCommand getManualJointCommand() {
+    return m_manualJointCommand;
+  }
   
   public AHRS getGyro() {
     return(m_gyro);
@@ -114,6 +129,14 @@ public class RobotContainer {
   public GeneralDriveCommand getGeneralDriveCommand() {
     return m_generalDriveCommand;
   }
+
+  public DriveCommand getDriveCommand() {
+    return m_driveCommand;
+  }
+
+public Subsystem getClimbSubsystem() {
+	return m_climbSubsystem;
+}
 }
 
 

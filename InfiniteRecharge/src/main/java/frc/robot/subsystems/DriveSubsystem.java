@@ -36,6 +36,8 @@ public class DriveSubsystem extends SubsystemBase {
     backLeft.follow(frontLeft);
     backRight.follow(frontRight);
 
+    frontRight.setInverted(true);
+
     gyro = robotContainer.getGyro();
     estimatedPose = new Pose2d();
     drivetrainPower = new Pose2d();
