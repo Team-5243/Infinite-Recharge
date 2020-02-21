@@ -33,7 +33,7 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer();
 
     CommandScheduler.getInstance().setDefaultCommand(m_robotContainer.getDriveSubsystem(), m_robotContainer.getDriveCommand());
-    CommandScheduler.getInstance().setDefaultCommand(m_robotContainer.getClimbSubsystem(), m_robotContainer.getManualJointCommand());
+    //CommandScheduler.getInstance().setDefaultCommand(m_robotContainer.getClimbSubsystem(), m_robotContainer.getManualJointCommand());
   }
 
   /**

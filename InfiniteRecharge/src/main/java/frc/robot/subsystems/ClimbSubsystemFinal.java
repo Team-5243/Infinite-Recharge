@@ -18,7 +18,7 @@ import frc.robot.Constants;
 import frc.states.ClimbArmsStateMachine;
 
 public class ClimbSubsystemFinal extends SubsystemBase {
-  private final CANSparkMax upperWinch, lowerWinch;
+  //private final CANSparkMax upperWinch, lowerWinch;
   private final CANSparkMax upperJoint, lowerJoint;
   private final Superstructure superstructure;
 
@@ -42,9 +42,12 @@ public class ClimbSubsystemFinal extends SubsystemBase {
    * Creates a new ClimbSubsystemFinal.
    */
   public ClimbSubsystemFinal(Superstructure superstructure) {
-    upperWinch = new CANSparkMax(Constants.UPPER_WINCH_CLIMB, MotorType.kBrushless);
-    lowerWinch = new CANSparkMax(Constants.LOWER_WINCH_CLIMB, MotorType.kBrushless);
+    //upperWinch = new CANSparkMax(Constants.UPPER_WINCH_CLIMB, MotorType.kBrushless);
+    //lowerWinch = new CANSparkMax(Constants.LOWER_WINCH_CLIMB, MotorType.kBrushless);
     lowerJoint = new CANSparkMax(Constants.LOWER_CLIMB_JOINT, MotorType.kBrushed);
+    
+    lowerJoint.getEncoder().setPosition(0);
+    
     upperJoint = new CANSparkMax(Constants.UPPER_CLIMB_JOINT, MotorType.kBrushed);
 
     this.superstructure = superstructure;
@@ -118,7 +121,7 @@ public class ClimbSubsystemFinal extends SubsystemBase {
     double lowerJointError = lowerJointDesiredAngle - getLowerAngle();
     double upperJointError = upperJointDesiredAngle - getUpperAngle();
 
-    //Update integral control.
+    // //Update integral control.
     winchRunningSum      += winchError * dt;
     lowerJointRunningSum += lowerJointError * dt;
     upperJointRunningSum += upperJointError * dt;
@@ -152,10 +155,10 @@ public class ClimbSubsystemFinal extends SubsystemBase {
     upperJointOutput += Constants.kS_CLIMB_UPPER_BAR * Math.signum(upperJointOutput);
 
     //Update the motor powers using the calculated motor power outputs above.
-    upperWinch.set(winchPower);
-    lowerWinch.set(winchPower + winchOutput);
+    //upperWinch.set(winchPower);
+    //lowerWinch.set(winchPower + winchOutput);
     lowerJoint.set(lowerJointOutput);
-    upperJoint.set(upperJointOutput);
+    //upperJoint.set(upperJointOutput);
 
     //Update the new, old values for the next call to periodic.
     lastWinchError      = winchError;
@@ -164,11 +167,11 @@ public class ClimbSubsystemFinal extends SubsystemBase {
   }
 
   public double getUpperWinchPosition() {
-    return upperWinch.getEncoder().getPosition() / Constants.WINCH_CLIMB_ENCODER_PULSES_PER_INCH;
+    return 0;//upperWinch.getEncoder().getPosition() / Constants.WINCH_CLIMB_ENCODER_PULSES_PER_INCH;
   }
 
   public double getLowerWinchPosition() {
-    return lowerWinch.getEncoder().getPosition() / Constants.WINCH_CLIMB_ENCODER_PULSES_PER_INCH;
+    return 0;//lowerWinch.getEncoder().getPosition() / Constants.WINCH_CLIMB_ENCODER_PULSES_PER_INCH;
   }
 
   public void setWinchPower(double power) {
@@ -176,19 +179,19 @@ public class ClimbSubsystemFinal extends SubsystemBase {
   }
 
   public double getLowerAngle() {
-    return Math.toRadians(40d)+((lowerJoint.getEncoder().getPosition()/Constants.NEO_ENCODER_PULSES_PER_REVOLUTION)*(2*Math.PI));
+    return (lowerJoint.getEncoder().getPosition()*(2*Math.PI/64));//Math.toRadians(40d)+((lowerJoint.getEncoder().getPosition()/Constants.NEO_ENCODER_PULSES_PER_REVOLUTION)*(2*Math.PI));
   }
 
   public double getLowerVelocity() {
-    return (lowerJoint.getEncoder().getVelocity()/Constants.NEO_ENCODER_PULSES_PER_REVOLUTION)*(2*Math.PI);
+    return (lowerJoint.getEncoder().getVelocity()*(2*Math.PI));
   }
 
   public double getUpperVelocity() {
-    return (upperJoint.getEncoder().getVelocity()/Constants.NEO_ENCODER_PULSES_PER_REVOLUTION)*(2*Math.PI);
+    return 0;//(upperJoint.getEncoder().getVelocity()/Constants.NEO_ENCODER_PULSES_PER_REVOLUTION)*(2*Math.PI);
   }
 
   public double getUpperAngle() {
-    return -getLowerAngle() + ((upperJoint.getEncoder().getPosition()/Constants.NEO_ENCODER_PULSES_PER_REVOLUTION)*(2*Math.PI));
+    return 0;//-getLowerAngle() + ((upperJoint.getEncoder().getPosition()/Constants.NEO_ENCODER_PULSES_PER_REVOLUTION)*(2*Math.PI));
   }
 
   public void setLowerProfile(IMotionProfile motionProfile) {

@@ -26,6 +26,7 @@ public class ClimbSubsystem extends PIDSubsystem {
   public ClimbSubsystem() {
     super(new PIDController(Constants.kP_CLIMB_WINCH_SYNCHRONIZE, Constants.kI_CLIMB_WINCH_SYNCHRONIZE, Constants.kD_CLIMB_WINCH_SYNCHRONIZE));
     lowerJoint = new CANSparkMax(Constants.LOWER_CLIMB_JOINT, MotorType.kBrushless);
+    lowerJoint.getEncoder().setPosition(0);
     upperJoint = new CANSparkMax(Constants.UPPER_CLIMB_JOINT, MotorType.kBrushed);
     upperWinch     = new CANSparkMax(Constants.UPPER_WINCH_CLIMB, MotorType.kBrushless);
     lowerWinch     = new CANSparkMax(Constants.LOWER_WINCH_CLIMB, MotorType.kBrushless);
@@ -36,7 +37,7 @@ public class ClimbSubsystem extends PIDSubsystem {
 
   public double getLowerAngle() {
     //0.733038 = 40 deg in rad
-    return 0.733038+((lowerJoint.getEncoder().getPosition()/Constants.NEO_ENCODER_PULSES_PER_REVOLUTION)*(2*Math.PI));
+    return ((lowerJoint.getEncoder().getPosition()*(2*Math.PI/64)));
   }
 
   public double getUpperAngle() {
@@ -49,7 +50,6 @@ public class ClimbSubsystem extends PIDSubsystem {
 
   public void runLowerJoint(double power) {
     lowerJoint.set(power);
-    System.out.println("lower: "+power);
   }
 
   public void runUpperJoint(double power) {
@@ -73,5 +73,10 @@ public class ClimbSubsystem extends PIDSubsystem {
     } else {
       enable();
     }
+  }
+
+  @Override
+  public void periodic() {
+    System.out.println("Lower joint: "+Math.toDegrees(getLowerAngle()));
   }
 }

@@ -84,18 +84,18 @@ public final class Constants {
     public static final double WINCH_CLIMB_ENCODER_PULSES_PER_REVOLUTION = NEO_ENCODER_PULSES_PER_REVOLUTION * WINCH_CLIMB_GEAR_RATIO; //enc / rev
     public static final double WINCH_CLIMB_ENCODER_PULSES_PER_INCH = WINCH_CLIMB_ENCODER_PULSES_PER_REVOLUTION / (2 * Math.PI * WINCH_RADIUS); //enc / in
 
-    public static final double LOWER_BAR_MAX_ANGULAR_SPEED = 0d; //deg / s
+    public static final double LOWER_BAR_MAX_ANGULAR_SPEED = 75d; //deg / s
     public static final double UPPER_BAR_MAX_ANGULAR_SPEED = 0d; //deg / s
 
-    public static final double LOWER_BAR_MAX_ANGULAR_ACCELERATION = 0d; //deg / s^2
+    public static final double LOWER_BAR_MAX_ANGULAR_ACCELERATION = 100d; //deg / s^2
     public static final double UPPER_BAR_MAX_ANGULAR_ACCELERATION = 0d; //deg / s^2
 
     public static final double kP_CLIMB_WINCH_SYNCHRONIZE = 0.001d; //motor power / in
     public static final double kI_CLIMB_WINCH_SYNCHRONIZE = 0d; //motor power / (in * s)
     public static final double kD_CLIMB_WINCH_SYNCHRONIZE = 0d; //motor power * s / in
 
-    public static final double kS_CLIMB_LOWER_BAR = 0d; //motor power
-    public static final double kP_CLIMB_LOWER_BAR = 0d; //motor power / deg
+    public static final double kS_CLIMB_LOWER_BAR = 0.0001d; //motor power
+    public static final double kP_CLIMB_LOWER_BAR = 1E-9d; //motor power / deg
     public static final double kI_CLIMB_LOWER_BAR = 0d; //motor power / (deg * s)
     public static final double kD_CLIMB_LOWER_BAR = 0d; //motor power * s / 
     public static final double kF_CLIMB_LOWER_BAR = 0d; //motor power / N
@@ -139,7 +139,7 @@ public final class Constants {
             LOWER_BAR_MAX_ANGULAR_ACCELERATION);
 
     //Upper bar motion profiles for climb setpoints
-    public static final IMotionProfile CLIMB_UPPER_INIT_TO_INTAKE_PROFILE = 
+    /*public static final IMotionProfile CLIMB_UPPER_INIT_TO_INTAKE_PROFILE = 
         new ResidualVibrationReductionMotionProfiler(
             ClimbArmsStateMachine.State.INIT.getUpperAngle(), 
             ClimbArmsStateMachine.State.INTAKE.getUpperAngle(), 
@@ -168,7 +168,7 @@ public final class Constants {
             ClimbArmsStateMachine.State.CLIMB.getUpperAngle(),
             ClimbArmsStateMachine.State.IDLE.getUpperAngle(), 
             UPPER_BAR_MAX_ANGULAR_SPEED, 
-            UPPER_BAR_MAX_ANGULAR_ACCELERATION);
+            UPPER_BAR_MAX_ANGULAR_ACCELERATION);*/
 
     //---------------------------------------------------------------
     // Drive Constants
