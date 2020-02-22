@@ -21,6 +21,7 @@ import frc.robot.commands.GeneralDriveCommand;
 import frc.robot.commands.ManualJointCommand;
 import frc.robot.commands.ManualLowerJointCommand;
 import frc.robot.commands.ManualUpperJointCommand;
+import frc.robot.commands.ManualWinchControlCommand;
 import frc.robot.subsystems.AdvancedClimbSubsystem;
 import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.ClimbSubsystemFinal;
@@ -61,6 +62,7 @@ public class RobotContainer {
                                     m_driveSubsystem::getDrivePower, m_driveSubsystem::getSteerPower);
   private final DriveCommand m_driveCommand = new DriveCommand(m_driveSubsystem, m_driverController.getXboxController());
 
+  private final ManualWinchControlCommand m_manualWinchControlCommand = new ManualWinchControlCommand(m_climbSubsystemFinal, m_driverController.getXboxController());
   //private final ManualJointCommand m_manualJointCommand = new ManualJointCommand(m_climbSubsystem, m_driverController.getXboxController());
 
   private final ArmStateControllerCommand m_armStateControllerCommand = new ArmStateControllerCommand(m_climbSubsystemFinal);
@@ -86,8 +88,11 @@ public class RobotContainer {
   private void configureButtonBindings() {
     //m_mechanismController.aButton.toggleWhenPressed(m_rollerCommand);
     //m_mechanismController.bButton.whenPressed(m_climbSubsystem::switchEnable);
-    m_driverController.aButton.whenPressed(m_armStateControllerCommand);
-    m_driverController.bButton.whenPressed(() -> ClimbArmsStateMachine.updateState(ClimbArmsStateMachine.State.INIT));
+    //m_driverController.aButton.whenPressed(m_armStateControllerCommand);
+    //m_driverController.bButton.whenPressed(() -> ClimbArmsStateMachine.updateState(ClimbArmsStateMachine.State.INIT));
+    
+    //IZZY THIS ONE
+    //m_driverController.xButton.toggleWhenPressed(/*command*/); //For flywheel command
   }
 
   // public ManualJointCommand getManualJointCommand() {
@@ -142,9 +147,17 @@ public class RobotContainer {
     return m_driveCommand;
   }
 
-  // public Subsystem getClimbSubsystem() {
+  //  public Subsystem getClimbSubsystem() {
   //   return m_climbSubsystem;
   // }
+
+  public ManualWinchControlCommand getWinchCommand() {
+    return m_manualWinchControlCommand;
+  }
+
+  public Subsystem getRealClimbSubsystem() {
+    return m_climbSubsystemFinal;
+  }
 }
 
 

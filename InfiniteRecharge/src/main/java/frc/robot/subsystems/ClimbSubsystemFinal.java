@@ -18,7 +18,7 @@ import frc.robot.Constants;
 import frc.states.ClimbArmsStateMachine;
 
 public class ClimbSubsystemFinal extends SubsystemBase {
-  //private final CANSparkMax upperWinch, lowerWinch;
+  private final CANSparkMax upperWinch, lowerWinch;
   private final CANSparkMax upperJoint, lowerJoint;
   private final Superstructure superstructure;
 
@@ -33,6 +33,11 @@ public class ClimbSubsystemFinal extends SubsystemBase {
   private double lowerJointRunningSum;
   private double upperJointRunningSum;
 
+  private double upperJointAngleTracker;
+  private double upperJointVelocity;
+  private double upperJointAcceleration;
+
+
   private TimeProfiler timeProfiler;
 
   private IMotionProfile lowerJointProfile;
@@ -42,13 +47,17 @@ public class ClimbSubsystemFinal extends SubsystemBase {
    * Creates a new ClimbSubsystemFinal.
    */
   public ClimbSubsystemFinal(Superstructure superstructure) {
-    //upperWinch = new CANSparkMax(Constants.UPPER_WINCH_CLIMB, MotorType.kBrushless);
-    //lowerWinch = new CANSparkMax(Constants.LOWER_WINCH_CLIMB, MotorType.kBrushless);
+    upperWinch = new CANSparkMax(Constants.UPPER_WINCH_CLIMB, MotorType.kBrushless);
+    lowerWinch = new CANSparkMax(Constants.LOWER_WINCH_CLIMB, MotorType.kBrushless);
     lowerJoint = new CANSparkMax(Constants.LOWER_CLIMB_JOINT, MotorType.kBrushed);
     
     lowerJoint.getEncoder().setPosition(0);
     
     upperJoint = new CANSparkMax(Constants.UPPER_CLIMB_JOINT, MotorType.kBrushed);
+
+    upperJointAngleTracker = getUpperAngle();
+    upperJointVelocity = 0;
+    upperJointAcceleration = 0;
 
     this.superstructure = superstructure;
     winchPower          = 0d;
@@ -80,6 +89,12 @@ public class ClimbSubsystemFinal extends SubsystemBase {
     Constants.DUAL_JOINTED_ARM_DYNAMIC_MODEL.updateBarAngles(getLowerAngle(), getUpperAngle());
     //Get the elapsed time since the last call to periodic.
     double dt = timeProfiler.getDeltaTime(true);
+
+    upperJointAcceleration = (upperJointVelocity - (getUpperAngle() - upperJointAngleTracker)/dt)/dt;
+
+    upperJointVelocity = (getUpperAngle() - upperJointAngleTracker)/dt;
+
+    upperJointAngleTracker = getUpperAngle();
 
     //Define feedforward variables for the lower joint.
     double lowerJointDesiredAngle               = ClimbArmsStateMachine.getState().getLowerAngle();
@@ -187,11 +202,12 @@ public class ClimbSubsystemFinal extends SubsystemBase {
   }
 
   public double getUpperVelocity() {
-    return 0;//(upperJoint.getEncoder().getVelocity()/Constants.NEO_ENCODER_PULSES_PER_REVOLUTION)*(2*Math.PI);
+    return upperJointVelocity;
+    //(upperJoint.getEncoder().getVelocity()/Constants.NEO_ENCODER_PULSES_PER_REVOLUTION)*(2*Math.PI);
   }
 
   public double getUpperAngle() {
-    return 0;//-getLowerAngle() + ((upperJoint.getEncoder().getPosition()/Constants.NEO_ENCODER_PULSES_PER_REVOLUTION)*(2*Math.PI));
+    return Math.asin((upperJoint.getOutputCurrent()/(1.084630885*9.8))/((38.5)/40));//-getLowerAngle() + ((upperJoint.getEncoder().getPosition()/Constants.NEO_ENCODER_PULSES_PER_REVOLUTION)*(2*Math.PI));
   }
 
   public void setLowerProfile(IMotionProfile motionProfile) {
@@ -200,5 +216,13 @@ public class ClimbSubsystemFinal extends SubsystemBase {
 
   public void setUpperProfile(IMotionProfile motionProfile) {
     upperJointProfile = motionProfile;
+  }
+
+  public void manuallyControlUpperWinch(double power) {
+    upperWinch.set(power);
+  }
+
+  public void manuallyControlLowerWinch(double power) {
+    lowerWinch.set(power);
   }
 }

@@ -62,8 +62,8 @@ public final class Constants {
     //---------------------------------------------------------------
     // Outtake Ports
     //---------------------------------------------------------------
-    public static final int LEFT_FLY = 8;
-    public static final int RIGHT_FLY = 9;
+    public static final int LEFT_FLY = 7;
+    public static final int RIGHT_FLY = 8;
 
     //---------------------------------------------------------------
     // Climb Ports
