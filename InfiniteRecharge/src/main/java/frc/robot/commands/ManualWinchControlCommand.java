@@ -22,6 +22,7 @@ public class ManualWinchControlCommand extends CommandBase {
     // Use addRequirements() here to declare subsystem dependencies.
     m_controller     = controller;
     m_climbSubsystem = subsystem;
+    addRequirements(m_climbSubsystem);
   }
 
   // Called when the command is initially scheduled.

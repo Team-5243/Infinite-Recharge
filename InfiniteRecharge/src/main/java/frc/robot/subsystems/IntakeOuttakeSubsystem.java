@@ -15,26 +15,17 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class IntakeOuttakeSubsystem extends SubsystemBase {
-  WPI_TalonSRX roller, leftConveyor, rightConveyor;
-  CANSparkMax leftFly, rightFly;
+  CANSparkMax roller, leftConveyor, rightConveyor;
+  CANSparkMax leftFly;
+  WPI_TalonSRX rightFly;
   
   public IntakeOuttakeSubsystem() {
-    roller = new WPI_TalonSRX(Constants.BACK_LEFT);
-    leftConveyor = new WPI_TalonSRX(Constants.LEFT_CONVEYOR);
-    rightConveyor = new WPI_TalonSRX(Constants.RIGHT_CONVEYOR);
-    leftFly = new CANSparkMax(Constants.LEFT_FLY, MotorType.kBrushless);
-    rightFly = new CANSparkMax(Constants.RIGHT_FLY, MotorType.kBrushless);
+    roller = new CANSparkMax(Constants.ROLLER, MotorType.kBrushed);
+    leftConveyor = new CANSparkMax(Constants.LEFT_CONVEYOR, MotorType.kBrushed);
+    rightConveyor = new CANSparkMax(Constants.RIGHT_CONVEYOR, MotorType.kBrushed);
+    leftFly = new CANSparkMax(Constants.LEFT_FLY, MotorType.kBrushed);
+    rightFly = new WPI_TalonSRX(Constants.RIGHT_FLY);
 
-    leftFly.follow(rightFly);
-    rightFly.setInverted(true);
-  }
-
-  public double getFlyWheelMeasurement() {
-    return rightFly.getEncoder().getPosition();
-  }
-
-  public double getFlyWheelVelocity() {
-    return rightFly.getEncoder().getVelocity();
   }
 
   public void runConveyor(double leftPower, double rightPower) {
@@ -54,19 +45,19 @@ public class IntakeOuttakeSubsystem extends SubsystemBase {
     rightFly.set(outSpeed);
   }
 
-public void stop(boolean in, boolean out) {
-  if(in) {
-    roller.set(0);
+  public void stop(boolean in, boolean out) {
+    if(in) {
+      roller.set(0);
+    }
+    
+    if(out) {
+      leftFly.set(0);
+      rightFly.set(0);
+    }
+    
+    leftConveyor.set(0);
+    rightConveyor.set(0);
   }
-  
-  if(out) {
-    leftFly.set(0);
-    rightFly.set(0);
-  }
-  
-  leftConveyor.set(0);
-  rightConveyor.set(0);
-}
 
   @Override
   public void periodic() {

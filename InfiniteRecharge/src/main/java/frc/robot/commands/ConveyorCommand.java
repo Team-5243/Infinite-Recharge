@@ -8,18 +8,19 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.lib.ConvertedXboxController;
 import frc.robot.subsystems.IntakeOuttakeSubsystem;
 
 public class ConveyorCommand extends CommandBase {
-  IntakeOuttakeSubsystem m_intakeOuttakeSubsystem;
-  double m_leftPower, m_rightPower;
+  private IntakeOuttakeSubsystem m_intakeOuttakeSubsystem;
+  private ConvertedXboxController m_controller;
   /**
    * Creates a new ConveyorCommand.
    */
-  public ConveyorCommand(IntakeOuttakeSubsystem subsystem, double leftPower, double rightPower) {
+  public ConveyorCommand(IntakeOuttakeSubsystem subsystem, ConvertedXboxController controller) {
+    // Use addRequirements() here to declare subsystem dependencies.
+    m_controller = controller;
     m_intakeOuttakeSubsystem = subsystem;
-    m_leftPower = leftPower;
-    m_rightPower = rightPower;
     addRequirements(m_intakeOuttakeSubsystem);
   }
 
@@ -31,7 +32,15 @@ public class ConveyorCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_intakeOuttakeSubsystem.runConveyor(m_leftPower, m_rightPower);
+    if(m_controller.isDpadDown()){
+      m_intakeOuttakeSubsystem.runConveyor(-.6, -.6);
+    } else if(m_controller.isDpadLeft()) {
+      m_intakeOuttakeSubsystem.runConveyor(.6, -.6);
+    } else if(m_controller.isDpadRight()) {
+      m_intakeOuttakeSubsystem.runConveyor(-.6, .6);
+    } else {
+      m_intakeOuttakeSubsystem.runConveyor(.6, .6);
+    }
   }
 
   // Called once the command ends or is interrupted.

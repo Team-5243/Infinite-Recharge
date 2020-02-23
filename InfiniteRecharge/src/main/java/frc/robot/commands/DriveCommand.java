@@ -36,6 +36,9 @@ public class DriveCommand extends CommandBase {
   public void execute() {
     double rightPower = clamp(-m_xboxController.getY(Hand.kLeft) - m_xboxController.getX(Hand.kRight), -1, 1);
     double leftPower = clamp(-m_xboxController.getY(Hand.kLeft) +m_xboxController.getX(Hand.kRight), -1, 1);
+    
+    rightPower = Math.abs(rightPower) < 0.15 ? 0 : rightPower;
+    leftPower = Math.abs(leftPower) < 0.15 ? 0 : leftPower;
     m_driveSubsystem.setMotors(rightPower, leftPower);
   }
 
