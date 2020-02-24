@@ -15,16 +15,17 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class IntakeOuttakeSubsystem extends SubsystemBase {
-  CANSparkMax roller, leftConveyor, rightConveyor;
+  CANSparkMax roller, leftConveyor;
   CANSparkMax leftFly;
-  WPI_TalonSRX rightFly;
+  CANSparkMax rightFly;
+  WPI_TalonSRX rightConveyor;
   
   public IntakeOuttakeSubsystem() {
     roller = new CANSparkMax(Constants.ROLLER, MotorType.kBrushed);
     leftConveyor = new CANSparkMax(Constants.LEFT_CONVEYOR, MotorType.kBrushed);
-    rightConveyor = new CANSparkMax(Constants.RIGHT_CONVEYOR, MotorType.kBrushed);
+    rightConveyor = new WPI_TalonSRX(Constants.RIGHT_CONVEYOR);
     leftFly = new CANSparkMax(Constants.LEFT_FLY, MotorType.kBrushed);
-    rightFly = new WPI_TalonSRX(Constants.RIGHT_FLY);
+    rightFly = new CANSparkMax(Constants.RIGHT_FLY, MotorType.kBrushed);
 
   }
 
