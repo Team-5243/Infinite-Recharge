@@ -16,6 +16,7 @@ import frc.robot.commands.RollerCommand;
 import frc.lib.ConvertedXboxController;
 import frc.robot.commands.ArmStateControllerCommand;
 import frc.robot.commands.ConveyorCommand;
+import frc.robot.commands.ConveyorShootCommand;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.FlywheelCommand;
 import frc.robot.commands.GeneralDriveCommand;
@@ -28,6 +29,8 @@ import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.ClimbSubsystemFinal;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeOuttakeSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.OuttakeSubsystem;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.WheelOfFortuneSubsystem;
 import frc.states.ClimbArmsStateMachine;
@@ -51,7 +54,9 @@ public class RobotContainer {
 
   private final Superstructure m_superstructure = new Superstructure();
   
-  private final IntakeOuttakeSubsystem  m_intakeOuttakeSubsystem  = new IntakeOuttakeSubsystem();
+  private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
+  private final OuttakeSubsystem m_outtakeSubsystem = new OuttakeSubsystem();
+  //private final IntakeOuttakeSubsystem  m_intakeOuttakeSubsystem  = new IntakeOuttakeSubsystem();
   //private final AdvancedClimbSubsystem  m_advancedClimbSubsystem  = new AdvancedClimbSubsystem(m_superstructure);
   private final DriveSubsystem          m_driveSubsystem          = new DriveSubsystem(this);
   //private final WheelOfFortuneSubsystem m_wheelOfFortuneSubsystem = new WheelOfFortuneSubsystem();
@@ -70,10 +75,12 @@ public class RobotContainer {
   private final ArmStateControllerCommand m_armStateControllerCommand = new ArmStateControllerCommand(m_climbSubsystemFinal);
   // private final ManualLowerJointCommand m_lowerJointCommand = new ManualLowerJointCommand(m_climbSubsystem, () -> m_driverController.getXboxController().getTriggerAxis(Hand.kRight));
   // private final ManualUpperJointCommand m_upperJointCommand = new ManualUpperJointCommand(m_climbSubsystem, () -> m_driverController.getXboxController().getTriggerAxis(Hand.kLeft));
-  private final RollerCommand   m_rollerCommand   = new RollerCommand(m_intakeOuttakeSubsystem);
-  private final FlywheelCommand m_flywheelCommand = new FlywheelCommand(m_intakeOuttakeSubsystem);
+  //private final RollerCommand   m_rollerCommand   = new RollerCommand(m_intakeSubsystem);
+  //private final FlywheelCommand m_flywheelCommand = new FlywheelCommand(m_outtakeSubsystem);
 
-  private final ConveyorCommand m_conveyorCommand = new ConveyorCommand(m_intakeOuttakeSubsystem, m_mechanismController);
+  private final ConveyorShootCommand m_conveyorShootCommand = new ConveyorShootCommand(m_intakeSubsystem, m_outtakeSubsystem);
+
+  //private final ConveyorCommand m_conveyorCommand = new ConveyorCommand(m_intakeOuttakeSubsystem, m_mechanismController);
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -94,9 +101,10 @@ public class RobotContainer {
     //m_driverController.aButton.whenPressed(m_armStateControllerCommand);
     //m_driverController.bButton.whenPressed(() -> ClimbArmsStateMachine.updateState(ClimbArmsStateMachine.State.INIT));
     
-    m_mechanismController.xButton.toggleWhenPressed(m_flywheelCommand);
-    m_mechanismController.yButton.toggleWhenPressed(m_conveyorCommand);
-    m_mechanismController.aButton.toggleWhenPressed(m_rollerCommand);
+    m_mechanismController.aButton.toggleWhenPressed(m_conveyorShootCommand);
+    //m_mechanismController.xButton.toggleWhenPressed(m_flywheelCommand);
+    //m_mechanismController.yButton.toggleWhenPressed(m_conveyorCommand);
+    //m_mechanismController.aButton.toggleWhenPressed(m_rollerCommand);
   }
 
   // public ManualJointCommand getManualJointCommand() {

@@ -14,18 +14,17 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class IntakeOuttakeSubsystem extends SubsystemBase {
-  CANSparkMax roller, leftConveyor, leftFly;
-  WPI_TalonSRX rightFly;
+public class IntakeSubsystem extends SubsystemBase {
+  CANSparkMax roller, leftConveyor;
   WPI_TalonSRX rightConveyor;
-  
-  public IntakeOuttakeSubsystem() {
+   /**
+   * Creates a new IntakeSubsystem.
+   */
+  public IntakeSubsystem() {
     roller = new CANSparkMax(Constants.ROLLER, MotorType.kBrushed);
     leftConveyor = new CANSparkMax(Constants.LEFT_CONVEYOR, MotorType.kBrushed);
     rightConveyor = new WPI_TalonSRX(Constants.RIGHT_CONVEYOR);
-    leftFly = new CANSparkMax(Constants.LEFT_FLY, MotorType.kBrushed);
-    rightFly = new WPI_TalonSRX(Constants.RIGHT_FLY);
-
+ 
   }
 
   public void runConveyor(double leftPower, double rightPower) {
@@ -36,25 +35,9 @@ public class IntakeOuttakeSubsystem extends SubsystemBase {
   public void intake(double inPower) {
       roller.set(inPower);
   }
-  
-  public void outtake(double outSpeed){
-    leftConveyor.set(0.3);
-    rightConveyor.set(0.3);
 
-    leftFly.set(outSpeed);
-    rightFly.set(outSpeed);
-  }
-
-  public void stop(boolean in, boolean out) {
-    if(in) {
-      roller.set(0);
-    }
-    
-    if(out) {
-      leftFly.set(0);
-      rightFly.set(0);
-    }
-    
+  public void stop() {
+    roller.set(0);
     leftConveyor.set(0);
     rightConveyor.set(0);
   }
@@ -64,3 +47,7 @@ public class IntakeOuttakeSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 }
+
+
+
+
