@@ -32,6 +32,10 @@ public class IntakeSubsystem extends SubsystemBase {
     rightConveyor.set(rightPower);
   }
 
+  public void stopConveyor() {
+    runConveyor(0, 0);
+  }
+
   public void intake(double inPower) {
       roller.set(inPower);
   }

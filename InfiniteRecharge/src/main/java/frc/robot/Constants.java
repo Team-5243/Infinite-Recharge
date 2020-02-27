@@ -47,7 +47,7 @@ public final class Constants {
     //---------------------------------------------------------------
     // Drive Ports
     //---------------------------------------------------------------
-    public static final int FRONT_RIGHT = 4;
+    public static final int FRONT_RIGHT = 10;
     public static final int FRONT_LEFT = 11;
     public static final int BACK_LEFT = 2;
     public static final int BACK_RIGHT = 1;
@@ -62,8 +62,8 @@ public final class Constants {
     //---------------------------------------------------------------
     // Outtake Ports
     //---------------------------------------------------------------
-    public static final int LEFT_FLY = 5; 
-    public static final int RIGHT_FLY = 10; //TalonSRX PDP port, not Spark CAN
+    public static final int LEFT_FLY = 4; 
+    public static final int RIGHT_FLY = 12; //TalonSRX PDP port, not Spark CAN
 
     //---------------------------------------------------------------
     // Climb Ports
@@ -71,7 +71,7 @@ public final class Constants {
     public static final int LOWER_CLIMB_JOINT = 5;
     public static final int UPPER_CLIMB_JOINT = 6;
     public static final int UPPER_WINCH_CLIMB = 3;
-    public static final int LOWER_WINCH_CLIMB = 12;
+    public static final int LOWER_WINCH_CLIMB = 15;
 
     //---------------------------------------------------------------
     // Climb Constants

@@ -12,12 +12,12 @@ import frc.robot.subsystems.IntakeSubsystem;
 
 
 public class RollerCommand extends CommandBase {
-  public static IntakeSubsystem m_IntakeSubsystem;
+  public static IntakeSubsystem m_intakeSubsystem;
   
 
   public RollerCommand(IntakeSubsystem intakeSubsystem) {
-    m_IntakeSubsystem = intakeSubsystem;
-    addRequirements(m_IntakeSubsystem);
+    m_intakeSubsystem = intakeSubsystem;
+    addRequirements(m_intakeSubsystem);
   }
   // Called when the command is initially scheduled.
 
@@ -29,13 +29,13 @@ public class RollerCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_IntakeSubsystem.intake(1);
+    m_intakeSubsystem.intake(1);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_IntakeSubsystem.stop(); 
+    m_intakeSubsystem.stop(); 
   }
 
   // Returns true when the command should end.

@@ -24,8 +24,6 @@ public class OuttakeSubsystem extends SubsystemBase {
    */
 
   public OuttakeSubsystem() {
-    
-    
     leftFly = new CANSparkMax(Constants.LEFT_FLY, MotorType.kBrushed);
     rightFly = new WPI_TalonSRX(Constants.RIGHT_FLY);
   }  

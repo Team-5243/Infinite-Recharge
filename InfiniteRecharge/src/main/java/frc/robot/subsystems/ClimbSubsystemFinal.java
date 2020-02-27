@@ -37,7 +37,6 @@ public class ClimbSubsystemFinal extends SubsystemBase {
   private double upperJointVelocity;
   private double upperJointAcceleration;
 
-
   private TimeProfiler timeProfiler;
 
   private IMotionProfile lowerJointProfile;
@@ -86,15 +85,9 @@ public class ClimbSubsystemFinal extends SubsystemBase {
   public void periodic() {
     //TODO: Use the dynamic model for feedforward control.
     //Update the dynamic model for the dual-jointed-arm for the current angles of the joints.
-    Constants.DUAL_JOINTED_ARM_DYNAMIC_MODEL.updateBarAngles(getLowerAngle(), getUpperAngle());
+    //Constants.DUAL_JOINTED_ARM_DYNAMIC_MODEL.updateBarAngles(getLowerAngle(), getUpperAngle());
     //Get the elapsed time since the last call to periodic.
     double dt = timeProfiler.getDeltaTime(true);
-
-    upperJointAcceleration = (upperJointVelocity - (getUpperAngle() - upperJointAngleTracker)/dt)/dt;
-
-    upperJointVelocity = (getUpperAngle() - upperJointAngleTracker)/dt;
-
-    upperJointAngleTracker = getUpperAngle();
 
     //Define feedforward variables for the lower joint.
     double lowerJointDesiredAngle               = ClimbArmsStateMachine.getState().getLowerAngle();
@@ -122,13 +115,15 @@ public class ClimbSubsystemFinal extends SubsystemBase {
       upperJointDesiredAngularAcceleration = upperJointProfile.getAcceleration();
 
       //Obtain the desired torque for the lower joint using the dynamic model and motion profiles.
-      lowerJointDesiredTorque = Constants.DUAL_JOINTED_ARM_DYNAMIC_MODEL.getLowerJointTorque(
+      /*lowerJointDesiredTorque = Constants.DUAL_JOINTED_ARM_DYNAMIC_MODEL.getLowerJointTorque(
         lowerJointDesiredAngularVelocity, upperJointDesiredAngularVelocity, 
-        lowerJointDesiredAngularAcceleration, upperJointDesiredAngularAcceleration);
+        lowerJointDesiredAngularAcceleration, upperJointDesiredAngularAcceleration);*/
+        lowerJointDesiredTorque = Math.cos(lowerJointDesiredAngle);
       //Obtain the desired torque for the upper joint using the dynamic model and motion profiles.
-      upperJointDesiredTorque = Constants.DUAL_JOINTED_ARM_DYNAMIC_MODEL.getUpperJointTorque(
+      /*upperJointDesiredTorque = Constants.DUAL_JOINTED_ARM_DYNAMIC_MODEL.getUpperJointTorque(
         lowerJointDesiredAngularVelocity, upperJointDesiredAngularVelocity, 
-        lowerJointDesiredAngularAcceleration, upperJointDesiredAngularAcceleration);
+        lowerJointDesiredAngularAcceleration, upperJointDesiredAngularAcceleration);*/
+        upperJointDesiredTorque = 0d;
     }
 
     //Get the errors of the system relative to their setpoints.
@@ -167,7 +162,7 @@ public class ClimbSubsystemFinal extends SubsystemBase {
  
     //Static friction compensation to minimize the need for integral control.
     lowerJointOutput += Constants.kS_CLIMB_LOWER_BAR * Math.signum(lowerJointOutput);
-    upperJointOutput += Constants.kS_CLIMB_UPPER_BAR * Math.signum(upperJointOutput);
+    //upperJointOutput += Constants.kS_CLIMB_UPPER_BAR * Math.signum(upperJointOutput);
 
     //Update the motor powers using the calculated motor power outputs above.
     //upperWinch.set(winchPower);
@@ -202,12 +197,11 @@ public class ClimbSubsystemFinal extends SubsystemBase {
   }
 
   public double getUpperVelocity() {
-    return upperJointVelocity;
-    //(upperJoint.getEncoder().getVelocity()/Constants.NEO_ENCODER_PULSES_PER_REVOLUTION)*(2*Math.PI);
+    return (upperJoint.getEncoder().getVelocity()/Constants.NEO_ENCODER_PULSES_PER_REVOLUTION)*(2*Math.PI);
   }
 
   public double getUpperAngle() {
-    return Math.asin((upperJoint.getOutputCurrent()/(1.084630885*9.8))/((38.5)/40));//-getLowerAngle() + ((upperJoint.getEncoder().getPosition()/Constants.NEO_ENCODER_PULSES_PER_REVOLUTION)*(2*Math.PI));
+    return /*Math.asin((upperJoint.getOutputCurrent()/(1.084630885*9.8))/((38.5)/40));*/-getLowerAngle() + ((upperJoint.getEncoder().getPosition()/Constants.NEO_ENCODER_PULSES_PER_REVOLUTION)*(2*Math.PI));
   }
 
   public void setLowerProfile(IMotionProfile motionProfile) {
