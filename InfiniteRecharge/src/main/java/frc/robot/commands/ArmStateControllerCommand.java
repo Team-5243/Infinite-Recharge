@@ -8,17 +8,17 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ClimbSubsystemFinal;
+import frc.robot.subsystems.ClimbSubsystem;
 import frc.states.ClimbArmsStateMachine;
 import frc.states.ClimbArmsStateMachine.State;
 
 public class ArmStateControllerCommand extends CommandBase {
   
-  ClimbSubsystemFinal m_ClimbSubsystemFinal;
+  ClimbSubsystem m_ClimbSubsystemFinal;
   /**
    * Creates a new ArmStateControllerCommand.
    */
-  public ArmStateControllerCommand(ClimbSubsystemFinal subsystem) {
+  public ArmStateControllerCommand(ClimbSubsystem subsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_ClimbSubsystemFinal = subsystem;
     addRequirements(m_ClimbSubsystemFinal);

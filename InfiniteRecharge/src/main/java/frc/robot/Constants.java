@@ -56,14 +56,14 @@ public final class Constants {
     // Intake Ports
     //---------------------------------------------------------------
     public static final int ROLLER = 7;
-    public static final int RIGHT_CONVEYOR = 8;
-    public static final int LEFT_CONVEYOR = 9;
+    public static final int RIGHT_CONVEYOR = 4;
+    public static final int LEFT_CONVEYOR = 12;
 
     //---------------------------------------------------------------
     // Outtake Ports
     //---------------------------------------------------------------
-    public static final int LEFT_FLY = 4; 
-    public static final int RIGHT_FLY = 12; //TalonSRX PDP port, not Spark CAN
+    public static final int LEFT_FLY = 8; 
+    public static final int RIGHT_FLY = 9; 
 
     //---------------------------------------------------------------
     // Climb Ports
@@ -76,8 +76,8 @@ public final class Constants {
     //---------------------------------------------------------------
     // Climb Constants
     //---------------------------------------------------------------
-    public static final double LOW_CLIMB_BAR_LENGTH = 1.5; //Filler (meters)
-    public static final double UPPER_CLIMB_BAR_LENGTH = 2d; //Filler (meters)
+    public static final double LOW_CLIMB_BAR_LENGTH = 30d * 0.0254d; //meters
+    public static final double UPPER_CLIMB_BAR_LENGTH = 30d * 0.0254d; //meters
 
     public static final double WINCH_RADIUS = 1d; //in
     public static final double WINCH_CLIMB_GEAR_RATIO = 60d; //geared for torque

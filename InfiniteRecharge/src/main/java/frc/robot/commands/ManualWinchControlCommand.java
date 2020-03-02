@@ -10,15 +10,15 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ClimbSubsystemFinal;
+import frc.robot.subsystems.ClimbSubsystem;
 
 public class ManualWinchControlCommand extends CommandBase {
-  private ClimbSubsystemFinal m_climbSubsystem;
+  private ClimbSubsystem m_climbSubsystem;
   private XboxController m_controller;
   /**
    * Creates a new ManualWinchControlCommand.
    */
-  public ManualWinchControlCommand(ClimbSubsystemFinal subsystem, XboxController controller){
+  public ManualWinchControlCommand(ClimbSubsystem subsystem, XboxController controller){
     // Use addRequirements() here to declare subsystem dependencies.
     m_controller     = controller;
     m_climbSubsystem = subsystem;
@@ -33,18 +33,14 @@ public class ManualWinchControlCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_climbSubsystem.manuallyControlUpperWinch((m_controller.getTriggerAxis(Hand.kRight) -
-      m_controller.getTriggerAxis(Hand.kLeft))*0.2
-    );
-    
-    m_climbSubsystem.manuallyControlLowerWinch(m_controller.getBumper(Hand.kLeft) ? -0.15 : 
-      m_controller.getBumper(Hand.kRight) ? 0.15 : 0
-    );
+    //TODO: If needed IDK
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_climbSubsystem.manuallyControlUpperWinch(0);
+    m_climbSubsystem.manuallyControlLowerWinch(0);
   }
 
   // Returns true when the command should end.

@@ -7,22 +7,18 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ClimbSubsystem;
+import frc.robot.subsystems.IntakeOuttakeSubsystem;
 
-public class ManualJointCommand extends CommandBase {
-  ClimbSubsystem m_climbSubsystem;
-  XboxController m_xboxController;
+public class ConveyorStuckCommand extends CommandBase {
+  private IntakeOuttakeSubsystem m_intakeOuttakeSubsystem;
   /**
-   * Creates a new ManualJointCommand.
+   * Creates a new ConveyorStuckCommand.
    */
-  public ManualJointCommand(ClimbSubsystem subsystem, XboxController controller) {
+  public ConveyorStuckCommand(IntakeOuttakeSubsystem subsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_climbSubsystem = subsystem;
-    m_xboxController = controller;
-    addRequirements(m_climbSubsystem);
+    m_intakeOuttakeSubsystem = subsystem;
+    addRequirements(m_intakeOuttakeSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -33,17 +29,13 @@ public class ManualJointCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_climbSubsystem.runLowerJoint(m_xboxController.getAButton() ? 
-      m_xboxController.getTriggerAxis(Hand.kRight)* -0.1 : 
-      m_xboxController.getTriggerAxis(Hand.kRight)* 0.25);
-    m_climbSubsystem.runUpperJoint(m_xboxController.getAButton() ?
-      m_xboxController.getTriggerAxis(Hand.kLeft)*-0.1 :
-      m_xboxController.getTriggerAxis(Hand.kLeft)*0.35);
+    m_intakeOuttakeSubsystem.unstuck();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_intakeOuttakeSubsystem.stopConveyor();
   }
 
   // Returns true when the command should end.

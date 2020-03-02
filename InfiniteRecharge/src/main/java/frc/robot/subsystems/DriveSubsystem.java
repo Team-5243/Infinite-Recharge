@@ -58,8 +58,6 @@ public class DriveSubsystem extends SubsystemBase {
 
   public void steerDrive(double drivePower, double steerPower) {
     setDrivetrainPower(new Pose2d(new Translation2d(drivePower, 0d), new Rotation2d(steerPower)));
-    //frontLeft.set(drivePower - steerPower);
-    //frontRight.set(drivePower + steerPower);
   }
 
   public void stopMotors() {

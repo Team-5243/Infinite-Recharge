@@ -15,22 +15,17 @@ import edu.wpi.first.wpilibj.GenericHID.Hand;
 import frc.robot.commands.RollerCommand;
 import frc.lib.ConvertedXboxController;
 import frc.robot.commands.ArmStateControllerCommand;
-import frc.robot.commands.ConveyorCommand;
-import frc.robot.commands.ConveyorShootCommand;
+import frc.robot.commands.ConveyorIntakeCommand;
+import frc.robot.commands.ConveyorStuckCommand;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.FlywheelCommand;
 import frc.robot.commands.GeneralDriveCommand;
-import frc.robot.commands.ManualJointCommand;
 import frc.robot.commands.ManualLowerJointCommand;
 import frc.robot.commands.ManualUpperJointCommand;
 import frc.robot.commands.ManualWinchControlCommand;
-import frc.robot.subsystems.AdvancedClimbSubsystem;
 import frc.robot.subsystems.ClimbSubsystem;
-import frc.robot.subsystems.ClimbSubsystemFinal;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeOuttakeSubsystem;
-import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.OuttakeSubsystem;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.WheelOfFortuneSubsystem;
 import frc.states.ClimbArmsStateMachine;
@@ -54,33 +49,24 @@ public class RobotContainer {
 
   private final Superstructure m_superstructure = new Superstructure();
   
-  private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
-  private final OuttakeSubsystem m_outtakeSubsystem = new OuttakeSubsystem();
-  //private final IntakeOuttakeSubsystem  m_intakeOuttakeSubsystem  = new IntakeOuttakeSubsystem();
-  //private final AdvancedClimbSubsystem  m_advancedClimbSubsystem  = new AdvancedClimbSubsystem(m_superstructure);
-  private final DriveSubsystem          m_driveSubsystem          = new DriveSubsystem(this);
-  //private final WheelOfFortuneSubsystem m_wheelOfFortuneSubsystem = new WheelOfFortuneSubsystem();
-  //private final ClimbSubsystem          m_climbSubsystem          = new ClimbSubsystem();
+  private final IntakeOuttakeSubsystem m_intakeOuttakeSubsystem = new IntakeOuttakeSubsystem();
+  private final DriveSubsystem m_driveSubsystem = new DriveSubsystem(this);
+  //private final ClimbSubsystem m_climbSubsystem = new ClimbSubsystem();
 
-  private final ClimbSubsystemFinal     m_climbSubsystemFinal     = new ClimbSubsystemFinal(m_superstructure);
-
-  private final GeneralDriveCommand m_generalDriveCommand = new GeneralDriveCommand(m_driveSubsystem, 
-                                    m_driveSubsystem::getDrivePower, m_driveSubsystem::getSteerPower);
+  private final GeneralDriveCommand m_generalDriveCommand = new GeneralDriveCommand(m_driveSubsystem, m_driveSubsystem::getDrivePower, m_driveSubsystem::getSteerPower);
 
   private final DriveCommand m_driveCommand = new DriveCommand(m_driveSubsystem, m_driverController.getXboxController());
 
-  private final ManualWinchControlCommand m_manualWinchControlCommand = new ManualWinchControlCommand(m_climbSubsystemFinal, m_mechanismController.getXboxController());
+  //private final ManualWinchControlCommand m_manualWinchControlCommand = new ManualWinchControlCommand(m_climbSubsystem, m_mechanismController.getXboxController());
   //private final ManualJointCommand m_manualJointCommand = new ManualJointCommand(m_climbSubsystem, m_driverController.getXboxController());
 
   //private final ArmStateControllerCommand m_armStateControllerCommand = new ArmStateControllerCommand(m_climbSubsystemFinal);
   // private final ManualLowerJointCommand m_lowerJointCommand = new ManualLowerJointCommand(m_climbSubsystem, () -> m_driverController.getXboxController().getTriggerAxis(Hand.kRight));
   // private final ManualUpperJointCommand m_upperJointCommand = new ManualUpperJointCommand(m_climbSubsystem, () -> m_driverController.getXboxController().getTriggerAxis(Hand.kLeft));
-  private final RollerCommand   m_rollerCommand   = new RollerCommand(m_intakeSubsystem);
-  private final FlywheelCommand m_flywheelCommand = new FlywheelCommand(m_outtakeSubsystem);
-
-  private final ConveyorShootCommand m_conveyorShootCommand = new ConveyorShootCommand(m_intakeSubsystem, m_outtakeSubsystem);
-
-  private final ConveyorCommand m_conveyorCommand = new ConveyorCommand(m_intakeSubsystem, m_mechanismController);
+  private final RollerCommand   m_rollerCommand   = new RollerCommand(m_intakeOuttakeSubsystem);
+  private final ConveyorIntakeCommand m_conveyorIntakeCommand = new ConveyorIntakeCommand(m_intakeOuttakeSubsystem);
+  private final ConveyorStuckCommand m_conveyorStuckCommand = new ConveyorStuckCommand(m_intakeOuttakeSubsystem);
+  private final FlywheelCommand m_flywheelCommand = new FlywheelCommand(m_intakeOuttakeSubsystem);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -88,7 +74,6 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
-    m_climbSubsystemFinal.start();
   }
 
   /**
@@ -102,10 +87,10 @@ public class RobotContainer {
     //m_driverController.aButton.whenPressed(m_armStateControllerCommand);
     //m_driverController.bButton.whenPressed(() -> ClimbArmsStateMachine.updateState(ClimbArmsStateMachine.State.INIT));
     
-    //m_mechanismController.aButton.toggleWhenPressed(m_conveyorShootCommand);
-    m_mechanismController.xButton.toggleWhenPressed(m_flywheelCommand);
-    m_mechanismController.yButton.toggleWhenPressed(m_conveyorCommand);
-    m_mechanismController.aButton.toggleWhenPressed(m_rollerCommand);
+    m_mechanismController.xButton.toggleWhenPressed(m_rollerCommand);
+    m_mechanismController.rightBumper.whileHeld(m_conveyorIntakeCommand);
+    m_mechanismController.leftBumper.whileHeld(m_conveyorStuckCommand);
+    m_driverController.aButton.whileHeld(m_flywheelCommand);
   }
 
   // public ManualJointCommand getManualJointCommand() {
@@ -140,10 +125,6 @@ public class RobotContainer {
     return null; //m_wheelOfFortuneSubsystem;
   }
 
-  public AdvancedClimbSubsystem getAdvancedClimbSubsystem() {
-    return null; //m_advancedClimbSubsystem;
-  }
-
   public FlywheelCommand getFlyWheelCommand() {
     return null; //m_flywheelCommand;
   }
@@ -160,16 +141,8 @@ public class RobotContainer {
     return m_driveCommand;
   }
 
-  //  public Subsystem getClimbSubsystem() {
-  //   return m_climbSubsystem;
-  // }
-
-  public ManualWinchControlCommand getWinchCommand() {
-    return m_manualWinchControlCommand;
-  }
-
-  public Subsystem getRealClimbSubsystem() {
-    return m_climbSubsystemFinal;
+  public Subsystem getClimbSubsystem() {
+    return null; //m_climbSubsystem;
   }
 }
 

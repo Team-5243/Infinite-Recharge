@@ -15,12 +15,12 @@ import frc.robot.subsystems.ClimbSubsystem;
 public class ManualLowerJointCommand extends CommandBase {
 
   ClimbSubsystem m_climbSubsystem;
-  DoubleSupplier m_triggerVal;
+  private boolean up;
   
-  public ManualLowerJointCommand(ClimbSubsystem subsystem, DoubleSupplier triggerVal) {
+  public ManualLowerJointCommand(ClimbSubsystem subsystem, boolean up) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_climbSubsystem = subsystem;
-    m_triggerVal = triggerVal;
+    this.up = up;
     addRequirements(m_climbSubsystem);
   }
 
@@ -32,14 +32,13 @@ public class ManualLowerJointCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_climbSubsystem.runLowerJoint(m_triggerVal.getAsDouble() * 0.05);
-    System.out.println(m_triggerVal.getAsDouble());
+    m_climbSubsystem.manuallyControlLowerJoint(up ? 0.5 : -0.1);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_climbSubsystem.runLowerJoint(0);
+    m_climbSubsystem.manuallyControlLowerJoint(0);
   }
 
   // Returns true when the command should end.

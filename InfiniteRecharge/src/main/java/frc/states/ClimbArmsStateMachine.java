@@ -37,8 +37,8 @@ public class ClimbArmsStateMachine {
     }
 
     public static boolean hasReachedGoal() {
-        return Math.abs(getState().getLowerAngle() - Robot.getRobotContainer().getAdvancedClimbSubsystem().getLowerAngle()) < 1d
-            && Math.abs(getState().getUpperAngle() - Robot.getRobotContainer().getAdvancedClimbSubsystem().getUpperAngle()) < 1d;
+        return Math.abs(getState().getLowerAngle() - Robot.getRobotContainer().getClimbSubsystem().getLowerAngle()) < 1d
+            && Math.abs(getState().getUpperAngle() - Robot.getRobotContainer().getClimbSubsystem().getUpperAngle()) < 1d;
     }
 
     public static State getState() {
