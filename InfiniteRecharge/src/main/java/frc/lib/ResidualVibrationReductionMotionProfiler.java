@@ -33,9 +33,11 @@ public class ResidualVibrationReductionMotionProfiler implements IMotionProfile 
     private double startTime;
     private boolean isNegative;
     private double initialPosition;
+    private boolean hasStarted;
 
     public ResidualVibrationReductionMotionProfiler(double initialPosition, double target, double maxSpeed, double maxAcceleration) {
         double displacement = target - initialPosition;
+        hasStarted = false;
         setInitialPosition(initialPosition);
         setNegative(displacement < 0d);
         setTimeProfiler(new TimeProfiler(false));
@@ -145,6 +147,7 @@ public class ResidualVibrationReductionMotionProfiler implements IMotionProfile 
     @Override
     public void start() {
         getTimeProfiler().start();
+        hasStarted = true;
     }
 
     private double getCurrentDisplacement(final double timeStamp) {
@@ -352,5 +355,10 @@ public class ResidualVibrationReductionMotionProfiler implements IMotionProfile 
             return ordinal() == ACCELERATE.ordinal() ? "Speeding Up" :
                     ordinal() == CRUISE.ordinal() ? "Cruising" : ordinal() == DECELERATE.ordinal() ? "Slowing Down" : "Finished";
         }
+    }
+
+    @Override
+    public boolean hasStarted() {
+        return hasStarted;
     }
 }

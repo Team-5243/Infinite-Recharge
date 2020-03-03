@@ -32,7 +32,7 @@ public class ManualLowerJointCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_climbSubsystem.manuallyControlLowerJoint(up ? 0.5 : -0.1);
+    m_climbSubsystem.manuallyControlLowerJoint(up ? 0.3 : -0.1);
   }
 
   // Called once the command ends or is interrupted.

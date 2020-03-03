@@ -7,7 +7,13 @@
 
 package frc.robot;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardComponent;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -22,6 +28,8 @@ public class Robot extends TimedRobot {
 
   private static RobotContainer m_robotContainer;
 
+  private static ShuffleboardTab m_shuffleBoard;
+
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -31,7 +39,35 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+    m_shuffleBoard = Shuffleboard.getTab("LiveWindow");  
     CommandScheduler.getInstance().setDefaultCommand(m_robotContainer.getDriveSubsystem(), m_robotContainer.getDriveCommand());
+    
+    m_shuffleBoard.addNumber("Lower Joint Angle", () -> Math.toDegrees(m_robotContainer.getClimbSubsystem().getLowerAngle()));
+    m_shuffleBoard.addNumber("Upper Joint Angle", () -> Math.toDegrees(m_robotContainer.getClimbSubsystem().getUpperAngle()));
+    m_shuffleBoard.addNumber("Lower Joint Power", m_robotContainer.getClimbSubsystem().getLowerJoint()::get);
+    m_shuffleBoard.addNumber("Upper Joint Power", m_robotContainer.getClimbSubsystem().getUpperJoint()::get);
+    m_shuffleBoard.addNumber("Lower Joint Velocity", m_robotContainer.getClimbSubsystem()::getLowerVelocity);
+    m_shuffleBoard.addNumber("Upper Joint Velocity", m_robotContainer.getClimbSubsystem()::getUpperVelocity);
+    m_shuffleBoard.addNumber("Upper Winch Position", m_robotContainer.getClimbSubsystem()::getUpperWinchPosition);
+    m_shuffleBoard.addNumber("Lower Winch Position", m_robotContainer.getClimbSubsystem()::getLowerWinchPosition);
+  
+    m_shuffleBoard.addNumber("Desired Lower Joint Angle", () -> m_robotContainer.getClimbSubsystem().getLowerProfile() == null ? -1 : 
+      Math.toDegrees(m_robotContainer.getClimbSubsystem().getLowerProfile().getPosition()));
+    
+    m_shuffleBoard.addNumber("Desired Upper Joint Angle", () -> m_robotContainer.getClimbSubsystem().getUpperProfile() == null ? -1 : 
+      m_robotContainer.getClimbSubsystem().getLowerProfile().getPosition());
+    
+    m_shuffleBoard.addNumber("Desired Lower Joint Angular Velocity", () -> m_robotContainer.getClimbSubsystem().getLowerProfile() == null ? 0 : 
+      m_robotContainer.getClimbSubsystem().getLowerProfile().getVelocity());
+  
+    m_shuffleBoard.addNumber("Desired Upper Joint Angular Velocity", () -> m_robotContainer.getClimbSubsystem().getUpperProfile() == null ? 0 : 
+      m_robotContainer.getClimbSubsystem().getLowerProfile().getVelocity());
+    
+
+    m_shuffleBoard.addNumber("Gyro Angle", m_robotContainer.getGyro()::getAngle);
+
+    
+
   }
 
   /**

@@ -13,7 +13,7 @@ public class ClimbArmsStateMachine {
     private static State state = State.INIT;
 
     public enum State {
-        INIT(0d, 0d), IDLE(Math.PI/2, 0d), INTAKE(0d, 0d), CLIMB(0d, 0d);
+        INIT(Math.toRadians(40d), 0d), IDLE(Math.PI / 2, 0d), INTAKE(0d, 0d), CLIMB(Math.PI/2, Math.PI/2);
 
         private final double lowerAngle;
         private final double upperAngle;

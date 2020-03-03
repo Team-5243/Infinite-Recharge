@@ -47,7 +47,7 @@ public class IntakeOuttakeSubsystem extends SubsystemBase {
   }
   
   public void outtake(double outSpeed){
-    leftConveyor.set(ControlMode.PercentOutput, 0.7);
+    leftConveyor.set(ControlMode.PercentOutput, -0.7);
     rightConveyor.set(ControlMode.PercentOutput, 0.7);
 
     rightFly.set(outSpeed);

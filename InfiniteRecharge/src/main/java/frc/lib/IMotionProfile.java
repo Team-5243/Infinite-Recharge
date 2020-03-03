@@ -21,6 +21,7 @@ public interface IMotionProfile {
     double getRuntime();
     boolean isDone(double timeStamp);
     boolean isDone();
+    boolean hasStarted();
     void start();
     void setNegative(boolean negative);
     boolean isNegative();

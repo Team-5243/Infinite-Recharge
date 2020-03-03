@@ -48,11 +48,11 @@ public class ClimbSubsystem extends SubsystemBase {
   public ClimbSubsystem(Superstructure superstructure) {
     upperWinch = new CANSparkMax(Constants.UPPER_WINCH_CLIMB, MotorType.kBrushless);
     lowerWinch = new CANSparkMax(Constants.LOWER_WINCH_CLIMB, MotorType.kBrushless);
-    lowerJoint = new CANSparkMax(Constants.LOWER_CLIMB_JOINT, MotorType.kBrushed);
+    lowerJoint = new CANSparkMax(Constants.LOWER_CLIMB_JOINT, MotorType.kBrushless);
+    upperJoint = new CANSparkMax(Constants.UPPER_CLIMB_JOINT, MotorType.kBrushless);
     
     lowerJoint.getEncoder().setPosition(0);
-    
-    upperJoint = new CANSparkMax(Constants.UPPER_CLIMB_JOINT, MotorType.kBrushed);
+    upperJoint.getEncoder().setPosition(0);
 
     upperJointAngleTracker = getUpperAngle();
     upperJointVelocity = 0;
@@ -100,30 +100,32 @@ public class ClimbSubsystem extends SubsystemBase {
     double upperJointDesiredAngularVelocity     = 0d;
     double upperJointDesiredAngularAcceleration = 0d;
     double upperJointDesiredTorque              = 0d;
-    //TODO: Check if profile has started yet
+
+    Constants.DUAL_JOINTED_ARM_DYNAMIC_MODEL.updateBarAngles(lowerJointDesiredAngle, upperJointDesiredAngle);
     //Check if there are motion profiles for the joints to follow.
-    if(lowerJointProfile != null && !lowerJointProfile.isDone() &&
-       upperJointProfile != null && !upperJointProfile.isDone()) {
-      //Set lower joint variables for obtaining the desired torque for the joints.
-      lowerJointDesiredAngle               = lowerJointProfile.getPosition();
-      lowerJointDesiredAngularVelocity     = lowerJointProfile.getVelocity();
-      lowerJointDesiredAngularAcceleration = lowerJointProfile.getAcceleration();
+    if(lowerJointProfile != null && upperJointProfile != null) {
+      if(!lowerJointProfile.isDone() && !upperJointProfile.isDone()) {
+        //Set lower joint variables for obtaining the desired torque for the joints.
+        lowerJointDesiredAngle               = lowerJointProfile.getPosition();
+        lowerJointDesiredAngularVelocity     = lowerJointProfile.getVelocity();
+        lowerJointDesiredAngularAcceleration = lowerJointProfile.getAcceleration();
 
-      //Set upper joint variables for obtaining the desired torque for the joints.
-      upperJointDesiredAngle               = upperJointProfile.getPosition();
-      upperJointDesiredAngularVelocity     = upperJointProfile.getVelocity();
-      upperJointDesiredAngularAcceleration = upperJointProfile.getAcceleration();
+        //Set upper joint variables for obtaining the desired torque for the joints.
+        upperJointDesiredAngle               = upperJointProfile.getPosition();
+        upperJointDesiredAngularVelocity     = upperJointProfile.getVelocity();
+        upperJointDesiredAngularAcceleration = upperJointProfile.getAcceleration();
 
-      //Obtain the desired torque for the lower joint using the dynamic model and motion profiles.
-      /*lowerJointDesiredTorque = Constants.DUAL_JOINTED_ARM_DYNAMIC_MODEL.getLowerJointTorque(
-        lowerJointDesiredAngularVelocity, upperJointDesiredAngularVelocity, 
-        lowerJointDesiredAngularAcceleration, upperJointDesiredAngularAcceleration);*/
-        lowerJointDesiredTorque = Math.cos(lowerJointDesiredAngle);
-      //Obtain the desired torque for the upper joint using the dynamic model and motion profiles.
-      /*upperJointDesiredTorque = Constants.DUAL_JOINTED_ARM_DYNAMIC_MODEL.getUpperJointTorque(
-        lowerJointDesiredAngularVelocity, upperJointDesiredAngularVelocity, 
-        lowerJointDesiredAngularAcceleration, upperJointDesiredAngularAcceleration);*/
-        upperJointDesiredTorque = 0d;
+        //Obtain the desired torque for the lower joint using the dynamic model and motion profiles.
+        lowerJointDesiredTorque = Constants.DUAL_JOINTED_ARM_DYNAMIC_MODEL.getLowerJointTorque(
+          lowerJointDesiredAngularVelocity, upperJointDesiredAngularVelocity, 
+          lowerJointDesiredAngularAcceleration, upperJointDesiredAngularAcceleration);
+          //lowerJointDesiredTorque = Math.cos(lowerJointDesiredAngle);
+        //Obtain the desired torque for the upper joint using the dynamic model and motion profiles.
+        upperJointDesiredTorque = Constants.DUAL_JOINTED_ARM_DYNAMIC_MODEL.getUpperJointTorque(
+          lowerJointDesiredAngularVelocity, upperJointDesiredAngularVelocity, 
+          lowerJointDesiredAngularAcceleration, upperJointDesiredAngularAcceleration);
+          //upperJointDesiredTorque = 0d;
+      }
     }
 
     //Get the errors of the system relative to their setpoints.
@@ -150,15 +152,15 @@ public class ClimbSubsystem extends SubsystemBase {
       Constants.kI_CLIMB_WINCH_SYNCHRONIZE * winchRunningSum +
       Constants.kD_CLIMB_WINCH_SYNCHRONIZE * (winchError - lastWinchError) / dt;
     double lowerJointOutput = 
-      Constants.kF_CLIMB_LOWER_BAR * lowerJointDesiredTorque +
+      Constants.kF_CLIMB_LOWER_BAR * (lowerJointDesiredTorque) +
       Constants.kP_CLIMB_LOWER_BAR * lowerJointError +
       Constants.kI_CLIMB_LOWER_BAR * lowerJointRunningSum +
-      Constants.kD_CLIMB_LOWER_BAR * (lowerJointError - lastLowerJointError) / dt;
+      Constants.kD_CLIMB_LOWER_BAR * ((lowerJointError - lastLowerJointError) / dt - lowerJointDesiredAngularVelocity);
     double upperJointOutput = 
       Constants.kF_CLIMB_UPPER_BAR * upperJointDesiredTorque +
       Constants.kP_CLIMB_UPPER_BAR * upperJointError +
       Constants.kI_CLIMB_UPPER_BAR * upperJointRunningSum +
-      Constants.kD_CLIMB_UPPER_BAR * (upperJointError - lastUpperJointError) / dt;
+      Constants.kD_CLIMB_UPPER_BAR * ((upperJointError - lastUpperJointError) / dt - upperJointDesiredAngularVelocity);
  
     //Static friction compensation to minimize the need for integral control.
     lowerJointOutput += Constants.kS_CLIMB_LOWER_BAR * Math.signum(lowerJointOutput);
@@ -167,8 +169,10 @@ public class ClimbSubsystem extends SubsystemBase {
     //Update the motor powers using the calculated motor power outputs above.
     //upperWinch.set(winchPower);
     //lowerWinch.set(winchPower + winchOutput);
+    lowerJointOutput = Range.clip(lowerJointOutput, -0.3, 0.3);
+    upperJointOutput = Range.clip(upperJointOutput, -0.2, 0.2);
     lowerJoint.set(lowerJointOutput);
-    //upperJoint.set(upperJointOutput);
+    upperJoint.set(upperJointOutput);
 
     //Update the new, old values for the next call to periodic.
     lastWinchError      = winchError;
@@ -188,28 +192,55 @@ public class ClimbSubsystem extends SubsystemBase {
     winchPower = power;
   }
 
+  //in radians
   public double getLowerAngle() {
-    return (lowerJoint.getEncoder().getPosition()*(2*Math.PI/64));//Math.toRadians(40d)+((lowerJoint.getEncoder().getPosition()/Constants.NEO_ENCODER_PULSES_PER_REVOLUTION)*(2*Math.PI));
+    return Math.toRadians(40) + (lowerJoint.getEncoder().getPosition()*(2*Math.PI/Constants.LOWER_JOINT_GEAR_RATIO));//Math.toRadians(40d)+((lowerJoint.getEncoder().getPosition()/Constants.NEO_ENCODER_PULSES_PER_REVOLUTION)*(2*Math.PI));
   }
 
   public double getLowerVelocity() {
-    return (lowerJoint.getEncoder().getVelocity()*(2*Math.PI));
+    return (lowerJoint.getEncoder().getVelocity()*(2*Math.PI/Constants.LOWER_JOINT_GEAR_RATIO));
   }
 
   public double getUpperVelocity() {
-    return (upperJoint.getEncoder().getVelocity()/Constants.NEO_ENCODER_PULSES_PER_REVOLUTION)*(2*Math.PI);
+    return upperJoint.getEncoder().getVelocity()*(2*Math.PI/Constants.UPPER_JOINT_GEAR_RATIO);
   }
 
   public double getUpperAngle() {
-    return /*Math.asin((upperJoint.getOutputCurrent()/(1.084630885*9.8))/((38.5)/40));*/-getLowerAngle() + ((upperJoint.getEncoder().getPosition()/Constants.NEO_ENCODER_PULSES_PER_REVOLUTION)*(2*Math.PI));
+    return -getLowerAngle() + (upperJoint.getEncoder().getPosition()*(2*Math.PI/Constants.UPPER_JOINT_GEAR_RATIO));
   }
 
   public void setLowerProfile(IMotionProfile motionProfile) {
     lowerJointProfile = motionProfile;
+    lowerJointProfile.start();
   }
 
   public void setUpperProfile(IMotionProfile motionProfile) {
     upperJointProfile = motionProfile;
+    upperJointProfile.start();
+  }
+
+  public IMotionProfile getLowerProfile() {
+    return lowerJointProfile;
+  }
+
+  public IMotionProfile getUpperProfile() {
+    return upperJointProfile;
+  }
+
+  public CANSparkMax getLowerJoint() {
+    return lowerJoint;
+  }
+
+  public CANSparkMax getUpperJoint() {
+    return upperJoint;
+  }
+
+  public CANSparkMax getlowerWinch() {
+    return lowerWinch;
+  }
+
+  public CANSparkMax getUpperWinch() {
+    return upperWinch;
   }
 
   public void manuallyControlUpperWinch(double power) {

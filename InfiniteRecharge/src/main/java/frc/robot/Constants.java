@@ -79,96 +79,99 @@ public final class Constants {
     public static final double LOW_CLIMB_BAR_LENGTH = 30d * 0.0254d; //meters
     public static final double UPPER_CLIMB_BAR_LENGTH = 30d * 0.0254d; //meters
 
+    public static final double LOWER_JOINT_GEAR_RATIO = 64d;
+    public static final double UPPER_JOINT_GEAR_RATIO = 100d;
+
     public static final double WINCH_RADIUS = 1d; //in
     public static final double WINCH_CLIMB_GEAR_RATIO = 60d; //geared for torque
     public static final double WINCH_CLIMB_ENCODER_PULSES_PER_REVOLUTION = NEO_ENCODER_PULSES_PER_REVOLUTION * WINCH_CLIMB_GEAR_RATIO; //enc / rev
     public static final double WINCH_CLIMB_ENCODER_PULSES_PER_INCH = WINCH_CLIMB_ENCODER_PULSES_PER_REVOLUTION / (2 * Math.PI * WINCH_RADIUS); //enc / in
 
-    public static final double LOWER_BAR_MAX_ANGULAR_SPEED = 75d; //deg / s
-    public static final double UPPER_BAR_MAX_ANGULAR_SPEED = 0d; //deg / s
+    public static final double LOWER_BAR_MAX_ANGULAR_SPEED = 535d * Math.PI / 180d; //rad / s
+    public static final double UPPER_BAR_MAX_ANGULAR_SPEED = 345d * Math.PI / 180d; //rad / s
 
-    public static final double LOWER_BAR_MAX_ANGULAR_ACCELERATION = 100d; //deg / s^2
-    public static final double UPPER_BAR_MAX_ANGULAR_ACCELERATION = 0d; //deg / s^2
+    public static final double LOWER_BAR_MAX_ANGULAR_ACCELERATION = 1000d * Math.PI / 180d; //rad / s^2
+    public static final double UPPER_BAR_MAX_ANGULAR_ACCELERATION = 600d * Math.PI / 180d; //rad / s^2
 
-    public static final double kP_CLIMB_WINCH_SYNCHRONIZE = 0.001d; //motor power / in
+    public static final double kP_CLIMB_WINCH_SYNCHRONIZE = 0d;//0.001d; //motor power / in
     public static final double kI_CLIMB_WINCH_SYNCHRONIZE = 0d; //motor power / (in * s)
     public static final double kD_CLIMB_WINCH_SYNCHRONIZE = 0d; //motor power * s / in
 
-    public static final double kS_CLIMB_LOWER_BAR = 0.0001d; //motor power
-    public static final double kP_CLIMB_LOWER_BAR = 1E-9d; //motor power / deg
-    public static final double kI_CLIMB_LOWER_BAR = 0d; //motor power / (deg * s)
-    public static final double kD_CLIMB_LOWER_BAR = 0d; //motor power * s / 
+    public static final double kS_CLIMB_LOWER_BAR = 0.015d; //motor power
+    public static final double kP_CLIMB_LOWER_BAR = 1E-9; //motor power / rad
+    public static final double kI_CLIMB_LOWER_BAR = 0d; //motor power / (rad * s)
+    public static final double kD_CLIMB_LOWER_BAR = 0d; //motor power * s / rad
     public static final double kF_CLIMB_LOWER_BAR = 0d; //motor power / N
 
     public static final double kS_CLIMB_UPPER_BAR = 0d; //motor power
-    public static final double kP_CLIMB_UPPER_BAR = 0d; //motor power deg
-    public static final double kI_CLIMB_UPPER_BAR = 0d; //motor power / (deg * s)
-    public static final double kD_CLIMB_UPPER_BAR = 0d; //motor power * s / deg
+    public static final double kP_CLIMB_UPPER_BAR = 0d; //motor power rad
+    public static final double kI_CLIMB_UPPER_BAR = 0d; //motor power / (rad * s)
+    public static final double kD_CLIMB_UPPER_BAR = 0d; //motor power * s / rad
     public static final double kF_CLIMB_UPPER_BAR = 0d; //motor power / N
 
     //Lower bar motion profiles for climb setpoints
-    public static final IMotionProfile CLIMB_LOWER_INIT_TO_INTAKE_PROFILE = 
+    public static final IMotionProfile CLIMB_LOWER_INIT_TO_CLIMB_PROFILE = 
         new ResidualVibrationReductionMotionProfiler(
             ClimbArmsStateMachine.State.INIT.getLowerAngle(), 
-            ClimbArmsStateMachine.State.INTAKE.getLowerAngle(), 
-            LOWER_BAR_MAX_ANGULAR_SPEED, 
-            LOWER_BAR_MAX_ANGULAR_ACCELERATION);
+            ClimbArmsStateMachine.State.CLIMB.getLowerAngle(), 
+            LOWER_BAR_MAX_ANGULAR_SPEED / 50d, 
+            LOWER_BAR_MAX_ANGULAR_ACCELERATION / 50d);
     public static final IMotionProfile CLIMB_LOWER_INTAKE_TO_IDLE_PROFILE = 
         new ResidualVibrationReductionMotionProfiler(
             ClimbArmsStateMachine.State.INTAKE.getLowerAngle(),
             ClimbArmsStateMachine.State.IDLE.getLowerAngle(),
-            LOWER_BAR_MAX_ANGULAR_SPEED, 
-            LOWER_BAR_MAX_ANGULAR_ACCELERATION);
+            LOWER_BAR_MAX_ANGULAR_SPEED / 50d, 
+            LOWER_BAR_MAX_ANGULAR_ACCELERATION / 50d);
     public static final IMotionProfile CLIMB_LOWER_IDLE_TO_INTAKE_PROFILE = 
         new ResidualVibrationReductionMotionProfiler(
             ClimbArmsStateMachine.State.IDLE.getLowerAngle(),
             ClimbArmsStateMachine.State.INTAKE.getLowerAngle(),
-            LOWER_BAR_MAX_ANGULAR_SPEED, 
-            LOWER_BAR_MAX_ANGULAR_ACCELERATION);
-    public static final IMotionProfile CLIMB_LOWER_IDLE_TO_CLIMB =
+            LOWER_BAR_MAX_ANGULAR_SPEED / 50d, 
+            LOWER_BAR_MAX_ANGULAR_ACCELERATION / 50d);
+    public static final IMotionProfile CLIMB_LOWER_IDLE_TO_CLIMB_PROFILE =
         new ResidualVibrationReductionMotionProfiler(
             ClimbArmsStateMachine.State.IDLE.getLowerAngle(),
             ClimbArmsStateMachine.State.CLIMB.getLowerAngle(), 
-            LOWER_BAR_MAX_ANGULAR_SPEED, 
-            LOWER_BAR_MAX_ANGULAR_ACCELERATION);
-    public static final IMotionProfile CLIMB_LOWER_CLIMB_TO_IDLE =
+            LOWER_BAR_MAX_ANGULAR_SPEED / 50d, 
+            LOWER_BAR_MAX_ANGULAR_ACCELERATION / 50d);
+    public static final IMotionProfile CLIMB_LOWER_CLIMB_TO_IDLE_PROFILE =
         new ResidualVibrationReductionMotionProfiler(
             ClimbArmsStateMachine.State.CLIMB.getLowerAngle(),
             ClimbArmsStateMachine.State.IDLE.getLowerAngle(), 
-            LOWER_BAR_MAX_ANGULAR_SPEED, 
-            LOWER_BAR_MAX_ANGULAR_ACCELERATION);
+            LOWER_BAR_MAX_ANGULAR_SPEED / 50d, 
+            LOWER_BAR_MAX_ANGULAR_ACCELERATION / 50d);
 
     //Upper bar motion profiles for climb setpoints
-    /*public static final IMotionProfile CLIMB_UPPER_INIT_TO_INTAKE_PROFILE = 
+    public static final IMotionProfile CLIMB_UPPER_INIT_TO_CLIMB_PROFILE = 
         new ResidualVibrationReductionMotionProfiler(
             ClimbArmsStateMachine.State.INIT.getUpperAngle(), 
             ClimbArmsStateMachine.State.INTAKE.getUpperAngle(), 
-            UPPER_BAR_MAX_ANGULAR_SPEED, 
-            UPPER_BAR_MAX_ANGULAR_ACCELERATION);
+            UPPER_BAR_MAX_ANGULAR_SPEED / 50d, 
+            UPPER_BAR_MAX_ANGULAR_ACCELERATION / 50d);
     public static final IMotionProfile CLIMB_UPPER_INTAKE_TO_IDLE_PROFILE = 
         new ResidualVibrationReductionMotionProfiler(
             ClimbArmsStateMachine.State.INTAKE.getUpperAngle(),
             ClimbArmsStateMachine.State.IDLE.getUpperAngle(), 
-            UPPER_BAR_MAX_ANGULAR_SPEED, 
-            UPPER_BAR_MAX_ANGULAR_ACCELERATION);
+            UPPER_BAR_MAX_ANGULAR_SPEED / 50d, 
+            UPPER_BAR_MAX_ANGULAR_ACCELERATION / 50d);
     public static final IMotionProfile CLIMB_UPPER_IDLE_TO_INTAKE_PROFILE = 
         new ResidualVibrationReductionMotionProfiler(
             ClimbArmsStateMachine.State.IDLE.getUpperAngle(),
             ClimbArmsStateMachine.State.INTAKE.getUpperAngle(),
-            UPPER_BAR_MAX_ANGULAR_SPEED, 
-            UPPER_BAR_MAX_ANGULAR_ACCELERATION);
-    public static final IMotionProfile CLIMB_UPPER_IDLE_TO_CLIMB =
+            UPPER_BAR_MAX_ANGULAR_SPEED / 50d, 
+            UPPER_BAR_MAX_ANGULAR_ACCELERATION / 50d);
+    public static final IMotionProfile CLIMB_UPPER_IDLE_TO_CLIMB_PROFILE =
         new ResidualVibrationReductionMotionProfiler(
             ClimbArmsStateMachine.State.IDLE.getUpperAngle(),
             ClimbArmsStateMachine.State.CLIMB.getUpperAngle(),  
-            UPPER_BAR_MAX_ANGULAR_SPEED, 
-            UPPER_BAR_MAX_ANGULAR_ACCELERATION);
-    public static final IMotionProfile CLIMB_UPPER_CLIMB_TO_IDLE =
+            UPPER_BAR_MAX_ANGULAR_SPEED / 50d, 
+            UPPER_BAR_MAX_ANGULAR_ACCELERATION / 50d);
+    public static final IMotionProfile CLIMB_UPPER_CLIMB_TO_IDLE_PROFILE =
         new ResidualVibrationReductionMotionProfiler(
             ClimbArmsStateMachine.State.CLIMB.getUpperAngle(),
             ClimbArmsStateMachine.State.IDLE.getUpperAngle(), 
-            UPPER_BAR_MAX_ANGULAR_SPEED, 
-            UPPER_BAR_MAX_ANGULAR_ACCELERATION);*/
+            UPPER_BAR_MAX_ANGULAR_SPEED / 50d, 
+            UPPER_BAR_MAX_ANGULAR_ACCELERATION / 50d);
 
     //---------------------------------------------------------------
     // Drive Constants
@@ -194,6 +197,18 @@ public final class Constants {
     //---------------------------------------------------------------
     // Dynamic Models
     //---------------------------------------------------------------
+    public static final double LBS_TO_KG = 0.453592d;
+    public static final double INCH_TO_METER = 0.0254d;
+
     public static final DualJointedArmDynamicModel DUAL_JOINTED_ARM_DYNAMIC_MODEL = 
-        new DualJointedArmDynamicModel(0d, 0d, 0d, 0d, 0d, 0d, 0d, 0d);
+        new DualJointedArmDynamicModel(
+            (1d - (1d - 0.125d) * (1d - 0.125d)) * (LBS_TO_KG / 10d) * LOW_CLIMB_BAR_LENGTH / INCH_TO_METER, 
+            (1d - (1d - 0.125d) * (1d - 0.125d)) * (LBS_TO_KG / 10d) * UPPER_CLIMB_BAR_LENGTH / INCH_TO_METER, 
+            (1d - (1d - 0.125d) * (1d - 0.125d)) * (LBS_TO_KG / 10d) * (LOW_CLIMB_BAR_LENGTH / INCH_TO_METER) * LOW_CLIMB_BAR_LENGTH * LOW_CLIMB_BAR_LENGTH, 
+            (1d - (1d - 0.125d) * (1d - 0.125d)) * (LBS_TO_KG / 10d) * (UPPER_CLIMB_BAR_LENGTH / INCH_TO_METER) * UPPER_CLIMB_BAR_LENGTH * UPPER_CLIMB_BAR_LENGTH, 
+            LOW_CLIMB_BAR_LENGTH, 
+            UPPER_CLIMB_BAR_LENGTH,
+            LOW_CLIMB_BAR_LENGTH / 2d, 
+            UPPER_CLIMB_BAR_LENGTH / 2d
+    );
 }

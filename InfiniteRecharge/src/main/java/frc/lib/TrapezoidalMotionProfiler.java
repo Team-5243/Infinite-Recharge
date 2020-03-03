@@ -27,9 +27,11 @@ public class TrapezoidalMotionProfiler implements IMotionProfile {
     private double duration;
 
     private boolean isNegative;
+    private boolean hasStarted;
 
     public TrapezoidalMotionProfiler(double initialPosition, double target, double initialVelocity,
                                              double maxSpeed, double maxAcceleration) {
+        hasStarted = false;
         setNegative((target - initialPosition) < 0d);
         setTarget(Math.abs(target - initialPosition));
         setMaxSpeed(maxSpeed);
@@ -65,6 +67,7 @@ public class TrapezoidalMotionProfiler implements IMotionProfile {
     @Override
     public void start() {
         getTimeProfiler().start();
+        hasStarted = true;
     }
 
     @Override
@@ -292,5 +295,10 @@ public class TrapezoidalMotionProfiler implements IMotionProfile {
 
     public static double dt() {
         return dt;
+    }
+
+    @Override
+    public boolean hasStarted() {
+        return hasStarted;
     }
 }
