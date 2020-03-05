@@ -7,6 +7,8 @@
 
 package frc.lib;
 
+import frc.robot.Constants;
+
 /**
  * https://www.researchgate.net/publication/267794207_Motion_profile_planning_for_reduced_jerk_and_vibration_residuals
  *
@@ -34,6 +36,8 @@ public class ResidualVibrationReductionMotionProfiler implements IMotionProfile 
     private boolean isNegative;
     private double initialPosition;
     private boolean hasStarted;
+
+    private int moduloCounter = 0;
 
     public ResidualVibrationReductionMotionProfiler(double initialPosition, double target, double maxSpeed, double maxAcceleration) {
         double displacement = target - initialPosition;
@@ -65,9 +69,10 @@ public class ResidualVibrationReductionMotionProfiler implements IMotionProfile 
     }
 
     public static void main(String... args) {
-        ResidualVibrationReductionMotionProfiler motionProfiler =
+        /*ResidualVibrationReductionMotionProfiler motionProfiler =
                 new ResidualVibrationReductionMotionProfiler(0d, 15.66667d, 21.6d, 200d);
-        System.out.println(motionProfiler);
+        System.out.println(motionProfiler);*/
+        //System.out.println(Constants.CLIMB_LOWER_INIT_TO_CLIMB_PROFILE.toString());
     }
 
     @Override
@@ -150,7 +155,7 @@ public class ResidualVibrationReductionMotionProfiler implements IMotionProfile 
         hasStarted = true;
     }
 
-    private double getCurrentDisplacement(final double timeStamp) {
+    public double getCurrentDisplacement(final double timeStamp) {
         double constantFactor = getConstantFactor();
         double cosinoidFrequency = 2 * Math.PI / getAccelerationTime();
         Phase currentPhase = getCurrentPhase(timeStamp);
@@ -168,15 +173,27 @@ public class ResidualVibrationReductionMotionProfiler implements IMotionProfile 
     }
 
     private double getCurrentVelocity(final double timeStamp) {
-        double constantFactor = getConstantFactor();
-        double cosinoidFrequency = 2 * Math.PI / getAccelerationTime();
+        // moduloCounter++;
+        // double constantFactor = getConstantFactor();
+        // double cosinoidFrequency = 2 * Math.PI / getAccelerationTime();
         Phase currentPhase = getCurrentPhase(timeStamp);
-        return (isNegative() ? -1d : 1d) * (currentPhase.ordinal() == Phase.ACCELERATE.ordinal() ?
-                constantFactor / (2 * cosinoidFrequency) * (cosinoidFrequency * timeStamp - Math.sin(cosinoidFrequency * timeStamp)) :
-                currentPhase.ordinal() == Phase.CRUISE.ordinal() ? constantFactor * getAccelerationTime() / 2 :
-                        currentPhase.ordinal() == Phase.DECELERATE.ordinal() ? constantFactor / (2 * cosinoidFrequency) *
-                                (cosinoidFrequency * (getTotalTime() - timeStamp) +
-                                        Math.sin(cosinoidFrequency * (timeStamp - getStartDecelerationTime()))) : 0d);
+        // double output = (isNegative() ? -1d : 1d) * (currentPhase.ordinal() == Phase.ACCELERATE.ordinal() ?
+        // constantFactor / (2 * cosinoidFrequency) * (cosinoidFrequency * timeStamp - Math.sin(cosinoidFrequency * timeStamp)) :
+        // currentPhase.ordinal() == Phase.CRUISE.ordinal() ? constantFactor * getAccelerationTime() / 2 :
+        //         currentPhase.ordinal() == Phase.DECELERATE.ordinal() ? constantFactor / (2 * cosinoidFrequency) *
+        //                 (cosinoidFrequency * (getTotalTime() - timeStamp) +
+        //                         Math.sin(cosinoidFrequency * (timeStamp - getStartDecelerationTime()))) : 0d);
+        // if (moduloCounter % 500 == 0) {
+        //     System.out.println("Constant Factor (Vel): " + constantFactor);
+        //     System.out.println("Output (Vel): " + output);
+        //     System.out.println("Cosinoid Frequency: " +cosinoidFrequency);
+        //     System.out.println("AccelerationTime:  " + getAccelerationTime());
+        //     System.out.println("Time Stamp:  " + timeStamp);
+        //     System.out.println("Deceleration Time  " + getStartDecelerationTime());
+        //     moduloCounter = 0;        
+        // }
+
+        return .2; //output;
     }
 
     private double getCurrentAcceleration(final double timeStamp) {
@@ -213,7 +230,7 @@ public class ResidualVibrationReductionMotionProfiler implements IMotionProfile 
                 time < 2 * getAccelerationTime() + getConstantVelocityTime() ? Phase.DECELERATE : Phase.DONE;
     }
 
-    protected double getConstantFactor() {
+    public double getConstantFactor() {
         return 2 * getTargetDisplacement() / (Math.pow(getAccelerationTime(), 2) + getAccelerationTime() * getConstantVelocityTime());
     }
 

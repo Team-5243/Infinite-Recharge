@@ -33,7 +33,8 @@ public class ManualWinchControlCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    //TODO: If needed IDK
+    m_climbSubsystem.manuallyControlLowerWinch(-0.5*(m_controller.getY(Hand.kRight)));
+    m_climbSubsystem.manuallyControlUpperWinch(-0.5*(m_controller.getY(Hand.kLeft)));
   }
 
   // Called once the command ends or is interrupted.

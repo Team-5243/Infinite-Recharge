@@ -10,7 +10,6 @@ package frc.robot;
 import frc.lib.DualJointedArmDynamicModel;
 import frc.lib.IMotionProfile;
 import frc.lib.ResidualVibrationReductionMotionProfiler;
-import frc.states.ClimbArmsStateMachine;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -70,8 +69,10 @@ public final class Constants {
     //---------------------------------------------------------------
     public static final int LOWER_CLIMB_JOINT = 5;
     public static final int UPPER_CLIMB_JOINT = 6;
-    public static final int UPPER_WINCH_CLIMB = 3;
-    public static final int LOWER_WINCH_CLIMB = 15;
+    public static final int FRONT_WINCH_CLIMB = 3;
+    public static final int BACK_WINCH_CLIMB = 15;
+
+    public static final int CLIMB = UPPER_CLIMB_JOINT;
 
     //---------------------------------------------------------------
     // Climb Constants
@@ -97,11 +98,11 @@ public final class Constants {
     public static final double kI_CLIMB_WINCH_SYNCHRONIZE = 0d; //motor power / (in * s)
     public static final double kD_CLIMB_WINCH_SYNCHRONIZE = 0d; //motor power * s / in
 
-    public static final double kS_CLIMB_LOWER_BAR = 0.015d; //motor power
+    public static final double kS_CLIMB_LOWER_BAR = 0.018d; //motor power
     public static final double kP_CLIMB_LOWER_BAR = 1E-9; //motor power / rad
     public static final double kI_CLIMB_LOWER_BAR = 0d; //motor power / (rad * s)
     public static final double kD_CLIMB_LOWER_BAR = 0d; //motor power * s / rad
-    public static final double kF_CLIMB_LOWER_BAR = 0d; //motor power / N
+    public static final double kF_CLIMB_LOWER_BAR = 1d;//0.5d; //motor power / N
 
     public static final double kS_CLIMB_UPPER_BAR = 0d; //motor power
     public static final double kP_CLIMB_UPPER_BAR = 0d; //motor power rad
@@ -110,69 +111,7 @@ public final class Constants {
     public static final double kF_CLIMB_UPPER_BAR = 0d; //motor power / N
 
     //Lower bar motion profiles for climb setpoints
-    public static final IMotionProfile CLIMB_LOWER_INIT_TO_CLIMB_PROFILE = 
-        new ResidualVibrationReductionMotionProfiler(
-            ClimbArmsStateMachine.State.INIT.getLowerAngle(), 
-            ClimbArmsStateMachine.State.CLIMB.getLowerAngle(), 
-            LOWER_BAR_MAX_ANGULAR_SPEED / 50d, 
-            LOWER_BAR_MAX_ANGULAR_ACCELERATION / 50d);
-    public static final IMotionProfile CLIMB_LOWER_INTAKE_TO_IDLE_PROFILE = 
-        new ResidualVibrationReductionMotionProfiler(
-            ClimbArmsStateMachine.State.INTAKE.getLowerAngle(),
-            ClimbArmsStateMachine.State.IDLE.getLowerAngle(),
-            LOWER_BAR_MAX_ANGULAR_SPEED / 50d, 
-            LOWER_BAR_MAX_ANGULAR_ACCELERATION / 50d);
-    public static final IMotionProfile CLIMB_LOWER_IDLE_TO_INTAKE_PROFILE = 
-        new ResidualVibrationReductionMotionProfiler(
-            ClimbArmsStateMachine.State.IDLE.getLowerAngle(),
-            ClimbArmsStateMachine.State.INTAKE.getLowerAngle(),
-            LOWER_BAR_MAX_ANGULAR_SPEED / 50d, 
-            LOWER_BAR_MAX_ANGULAR_ACCELERATION / 50d);
-    public static final IMotionProfile CLIMB_LOWER_IDLE_TO_CLIMB_PROFILE =
-        new ResidualVibrationReductionMotionProfiler(
-            ClimbArmsStateMachine.State.IDLE.getLowerAngle(),
-            ClimbArmsStateMachine.State.CLIMB.getLowerAngle(), 
-            LOWER_BAR_MAX_ANGULAR_SPEED / 50d, 
-            LOWER_BAR_MAX_ANGULAR_ACCELERATION / 50d);
-    public static final IMotionProfile CLIMB_LOWER_CLIMB_TO_IDLE_PROFILE =
-        new ResidualVibrationReductionMotionProfiler(
-            ClimbArmsStateMachine.State.CLIMB.getLowerAngle(),
-            ClimbArmsStateMachine.State.IDLE.getLowerAngle(), 
-            LOWER_BAR_MAX_ANGULAR_SPEED / 50d, 
-            LOWER_BAR_MAX_ANGULAR_ACCELERATION / 50d);
-
-    //Upper bar motion profiles for climb setpoints
-    public static final IMotionProfile CLIMB_UPPER_INIT_TO_CLIMB_PROFILE = 
-        new ResidualVibrationReductionMotionProfiler(
-            ClimbArmsStateMachine.State.INIT.getUpperAngle(), 
-            ClimbArmsStateMachine.State.INTAKE.getUpperAngle(), 
-            UPPER_BAR_MAX_ANGULAR_SPEED / 50d, 
-            UPPER_BAR_MAX_ANGULAR_ACCELERATION / 50d);
-    public static final IMotionProfile CLIMB_UPPER_INTAKE_TO_IDLE_PROFILE = 
-        new ResidualVibrationReductionMotionProfiler(
-            ClimbArmsStateMachine.State.INTAKE.getUpperAngle(),
-            ClimbArmsStateMachine.State.IDLE.getUpperAngle(), 
-            UPPER_BAR_MAX_ANGULAR_SPEED / 50d, 
-            UPPER_BAR_MAX_ANGULAR_ACCELERATION / 50d);
-    public static final IMotionProfile CLIMB_UPPER_IDLE_TO_INTAKE_PROFILE = 
-        new ResidualVibrationReductionMotionProfiler(
-            ClimbArmsStateMachine.State.IDLE.getUpperAngle(),
-            ClimbArmsStateMachine.State.INTAKE.getUpperAngle(),
-            UPPER_BAR_MAX_ANGULAR_SPEED / 50d, 
-            UPPER_BAR_MAX_ANGULAR_ACCELERATION / 50d);
-    public static final IMotionProfile CLIMB_UPPER_IDLE_TO_CLIMB_PROFILE =
-        new ResidualVibrationReductionMotionProfiler(
-            ClimbArmsStateMachine.State.IDLE.getUpperAngle(),
-            ClimbArmsStateMachine.State.CLIMB.getUpperAngle(),  
-            UPPER_BAR_MAX_ANGULAR_SPEED / 50d, 
-            UPPER_BAR_MAX_ANGULAR_ACCELERATION / 50d);
-    public static final IMotionProfile CLIMB_UPPER_CLIMB_TO_IDLE_PROFILE =
-        new ResidualVibrationReductionMotionProfiler(
-            ClimbArmsStateMachine.State.CLIMB.getUpperAngle(),
-            ClimbArmsStateMachine.State.IDLE.getUpperAngle(), 
-            UPPER_BAR_MAX_ANGULAR_SPEED / 50d, 
-            UPPER_BAR_MAX_ANGULAR_ACCELERATION / 50d);
-
+  
     //---------------------------------------------------------------
     // Drive Constants
     //---------------------------------------------------------------
@@ -211,4 +150,5 @@ public final class Constants {
             LOW_CLIMB_BAR_LENGTH / 2d, 
             UPPER_CLIMB_BAR_LENGTH / 2d
     );
+    
 }

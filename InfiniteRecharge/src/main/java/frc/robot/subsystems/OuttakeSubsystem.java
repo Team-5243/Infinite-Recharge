@@ -9,7 +9,6 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -17,15 +16,15 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class IntakeOuttakeSubsystem extends SubsystemBase {
-  CANSparkMax roller, leftFly, rightFly;
-  TalonSRX rightConveyor, leftConveyor;
+public class OuttakeSubsystem extends SubsystemBase {
+  CANSparkMax leftFly, rightFly;
+  CANSparkMax m_rightConveyor, m_leftConveyor;
   
-  public IntakeOuttakeSubsystem() {
-    roller = new CANSparkMax(Constants.ROLLER, MotorType.kBrushed);
+  public OuttakeSubsystem() {
+    m_leftConveyor = new CANSparkMax(Constants.LEFT_CONVEYOR, MotorType.kBrushed);
+    m_rightConveyor = new CANSparkMax(Constants.RIGHT_CONVEYOR, MotorType.kBrushed);
 
-    leftConveyor = new TalonSRX(Constants.LEFT_CONVEYOR);
-    rightConveyor = new TalonSRX(Constants.RIGHT_CONVEYOR);
+    m_leftConveyor.setInverted(true);
 
     leftFly = new CANSparkMax(Constants.LEFT_FLY, MotorType.kBrushed);
     rightFly = new CANSparkMax(Constants.RIGHT_FLY, MotorType.kBrushed);
@@ -37,37 +36,33 @@ public class IntakeOuttakeSubsystem extends SubsystemBase {
   }
 
   public void runConveyor(double leftPower, double rightPower) {
-    leftConveyor.set(ControlMode.PercentOutput, leftPower);
-    rightConveyor.set(ControlMode.PercentOutput, rightPower);
-  }
-
-  public void intake(double inPower) {
-    roller.set(inPower);
-    runConveyor(0.4, 0.4);
-  }
-  
-  public void outtake(double outSpeed){
-    leftConveyor.set(ControlMode.PercentOutput, -0.7);
-    rightConveyor.set(ControlMode.PercentOutput, 0.7);
-
-    rightFly.set(outSpeed);
-  }
-
-  public void unstuck() {
-    leftConveyor.set(ControlMode.PercentOutput, 0.5);
-    rightConveyor.set(ControlMode.PercentOutput, -0.5);
-  }
-
-  public void stopIntake() {
-    roller.set(0);
-  }
-
-  public void stopOuttake() {
-    rightFly.set(0);
+    m_leftConveyor.set(leftPower);
+    m_rightConveyor.set(rightPower);
   }
 
   public void stopConveyor() {
     runConveyor(0, 0);
+  }
+  
+  public void outtake(double outSpeed){
+    m_leftConveyor.set(0.7);
+    m_rightConveyor.set(0.7);
+    rightFly.set(outSpeed);
+  }
+
+  public void conveyorIntake() {
+    m_leftConveyor.set(-0.5);
+    m_rightConveyor.set(-0.5);
+  }
+
+  public void unstuck() {
+    m_leftConveyor.set(-0.5);
+    m_rightConveyor.set(0.5);
+  }
+
+  public void stopOuttake() {
+    rightFly.set(0);
+    stopConveyor();
   }
 
   @Override

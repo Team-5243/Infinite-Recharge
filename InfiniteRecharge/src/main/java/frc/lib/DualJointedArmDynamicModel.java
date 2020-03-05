@@ -37,21 +37,31 @@ public class DualJointedArmDynamicModel {
 
     public double getLowerJointTorque(double lowerBarAngularVelocity, double upperBarAngularVelocity,
                                     double lowerBarAngularAcceleration, double upperBarAngularAcceleration) {
+
         double cosLowerAngle = Math.cos(lowerBarAngle);
         double sinLowerAngle = Math.sin(lowerBarAngle);
         double cosUpperAngle = Math.cos(upperBarAngle);
         double sinUpperAngle = Math.sin(upperBarAngle);
         double cosLowerPlusUpperAngle = Math.cos(lowerBarAngle + upperBarAngle);
         double sinLowerPlusUpperAngle = Math.sin(lowerBarAngle + upperBarAngle);
-        return (lowerBarMass*getLowerBarHorizontalDistanceFromCenterOfMass()*Constants.GRAVITATIONAL_ACCELERATION * cosLowerAngle) -
-            (lowerBarMass*getLowerBarVerticalDistanceFromCenterOfMass()*Constants.GRAVITATIONAL_ACCELERATION * sinLowerAngle) +
-            (momentOfInertiaLowerBar*lowerBarAngularAcceleration) + (upperBarMass*((Constants.GRAVITATIONAL_ACCELERATION * lowerBarLength * cosLowerAngle) + 
-            Math.pow(lowerBarLength,2)*lowerBarAngularAcceleration) + ((upperBarMass*getUpperBarHorizontalDistanceFromCenterOfMass())*((Constants.GRAVITATIONAL_ACCELERATION*cosLowerPlusUpperAngle) + 
-            (2*lowerBarLength*lowerBarAngularAcceleration*cosUpperAngle) + (lowerBarLength*upperBarAngularAcceleration*cosUpperAngle) - (2*lowerBarLength*
-            lowerBarAngularVelocity*upperBarAngularVelocity*sinUpperAngle) - (lowerBarLength*Math.pow(upperBarAngularVelocity,2)*sinUpperAngle)))) +
-            ((upperBarMass*getUpperBarVerticalDistanceFromCenterOfMass()) * (-(Constants.GRAVITATIONAL_ACCELERATION*sinLowerPlusUpperAngle) - (2*lowerBarLength*
-            lowerBarAngularAcceleration*sinUpperAngle) - (lowerBarLength*upperBarAngularAcceleration*sinUpperAngle) - (2*lowerBarLength*lowerBarAngularVelocity*upperBarAngularVelocity*
-            cosUpperAngle) - (lowerBarLength*Math.pow(upperBarAngularVelocity, 2)*cosUpperAngle))) + (momentOfInertiaUpperBar*(lowerBarAngularAcceleration+upperBarAngularAcceleration));
+
+        return (lowerBarMass*getLowerBarHorizontalDistanceFromCenterOfMass()*Constants.GRAVITATIONAL_ACCELERATION*cosLowerAngle)
+            - (lowerBarMass*getLowerBarVerticalDistanceFromCenterOfMass()*Constants.GRAVITATIONAL_ACCELERATION*sinLowerAngle)
+            + (momentOfInertiaLowerBar*lowerBarAngularAcceleration) + upperBarMass*(Constants.GRAVITATIONAL_ACCELERATION*lowerBarLength*cosLowerAngle + Math.pow(lowerBarLength, 2)*lowerBarAngularAcceleration)
+            + ((upperBarMass*getUpperBarHorizontalDistanceFromCenterOfMass()) * (Constants.GRAVITATIONAL_ACCELERATION*cosLowerPlusUpperAngle + 2*(lowerBarMass*lowerBarAngularAcceleration*cosUpperAngle) + lowerBarLength*upperBarAngularAcceleration*cosUpperAngle
+            - 2*(lowerBarLength*lowerBarAngularVelocity*upperBarAngularVelocity*sinUpperAngle) - lowerBarLength*Math.pow(upperBarAngularVelocity, 2)*sinUpperAngle))
+            + ((upperBarMass*getUpperBarVerticalDistanceFromCenterOfMass()) * (-Constants.GRAVITATIONAL_ACCELERATION*sinLowerPlusUpperAngle) - 2*(lowerBarLength*lowerBarAngularAcceleration*sinUpperAngle) - (lowerBarLength*upperBarAngularAcceleration*sinUpperAngle)
+            - 2*(lowerBarLength*lowerBarAngularVelocity*upperBarAngularVelocity*cosUpperAngle) - (lowerBarLength*Math.pow(upperBarAngularVelocity, 2)*cosUpperAngle)) + momentOfInertiaUpperBar*(lowerBarAngularAcceleration + upperBarAngularAcceleration);
+        // return (lowerBarMass*getLowerBarHorizontalDistanceFromCenterOfMass()*Constants.GRAVITATIONAL_ACCELERATION * cosLowerAngle) -
+        //     (lowerBarMass*getLowerBarVerticalDistanceFromCenterOfMass()*Constants.GRAVITATIONAL_ACCELERATION * sinLowerAngle) +
+        //     (momentOfInertiaLowerBar*lowerBarAngularAcceleration) 
+        //     + (upperBarMass*((Constants.GRAVITATIONAL_ACCELERATION * lowerBarLength * cosLowerAngle) + 
+        //     Math.pow(lowerBarLength,2)*lowerBarAngularAcceleration) + ((upperBarMass*getUpperBarHorizontalDistanceFromCenterOfMass())*((Constants.GRAVITATIONAL_ACCELERATION*cosLowerPlusUpperAngle) + 
+        //     (2*lowerBarLength*lowerBarAngularAcceleration*cosUpperAngle) + (lowerBarLength*upperBarAngularAcceleration*cosUpperAngle) - (2*lowerBarLength*
+        //     lowerBarAngularVelocity*upperBarAngularVelocity*sinUpperAngle) - (lowerBarLength*Math.pow(upperBarAngularVelocity,2)*sinUpperAngle)))) +
+        //     ((upperBarMass*getUpperBarVerticalDistanceFromCenterOfMass()) * (-(Constants.GRAVITATIONAL_ACCELERATION*sinLowerPlusUpperAngle) - (2*lowerBarLength*
+        //     lowerBarAngularAcceleration*sinUpperAngle) - (lowerBarLength*upperBarAngularAcceleration*sinUpperAngle) - (2*lowerBarLength*lowerBarAngularVelocity*upperBarAngularVelocity*
+        //     cosUpperAngle) - (lowerBarLength*Math.pow(upperBarAngularVelocity, 2)*cosUpperAngle))) + (momentOfInertiaUpperBar*(lowerBarAngularAcceleration+upperBarAngularAcceleration));
     }
 
     public double getUpperJointTorque(double lowerBarAngularVelocity, double upperBarAngularVelocity,

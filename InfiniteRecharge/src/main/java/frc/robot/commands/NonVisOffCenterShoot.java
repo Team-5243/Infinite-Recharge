@@ -7,7 +7,6 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.RobotContainer;
 
@@ -22,7 +21,7 @@ public class NonVisOffCenterShoot extends SequentialCommandGroup {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
     super(new DriveStraightCommand(m_robotContainer.getDriveSubsystem(), 1, 100), 
-          new FlywheelCommand(m_robotContainer.getIntakeOutakeSubsystem()),
+          new FlywheelCommand(m_robotContainer.getOuttakeSubsystem()),
           new DriveStraightCommand(m_robotContainer.getDriveSubsystem(), -1, 120));
   }
 }

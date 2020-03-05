@@ -39,35 +39,10 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-    m_shuffleBoard = Shuffleboard.getTab("LiveWindow");  
-    CommandScheduler.getInstance().setDefaultCommand(m_robotContainer.getDriveSubsystem(), m_robotContainer.getDriveCommand());
+    m_robotContainer.getPneumaticIntakeSubsystem().setClosedLoopControl(true);
     
-    m_shuffleBoard.addNumber("Lower Joint Angle", () -> Math.toDegrees(m_robotContainer.getClimbSubsystem().getLowerAngle()));
-    m_shuffleBoard.addNumber("Upper Joint Angle", () -> Math.toDegrees(m_robotContainer.getClimbSubsystem().getUpperAngle()));
-    m_shuffleBoard.addNumber("Lower Joint Power", m_robotContainer.getClimbSubsystem().getLowerJoint()::get);
-    m_shuffleBoard.addNumber("Upper Joint Power", m_robotContainer.getClimbSubsystem().getUpperJoint()::get);
-    m_shuffleBoard.addNumber("Lower Joint Velocity", m_robotContainer.getClimbSubsystem()::getLowerVelocity);
-    m_shuffleBoard.addNumber("Upper Joint Velocity", m_robotContainer.getClimbSubsystem()::getUpperVelocity);
-    m_shuffleBoard.addNumber("Upper Winch Position", m_robotContainer.getClimbSubsystem()::getUpperWinchPosition);
-    m_shuffleBoard.addNumber("Lower Winch Position", m_robotContainer.getClimbSubsystem()::getLowerWinchPosition);
-  
-    m_shuffleBoard.addNumber("Desired Lower Joint Angle", () -> m_robotContainer.getClimbSubsystem().getLowerProfile() == null ? -1 : 
-      Math.toDegrees(m_robotContainer.getClimbSubsystem().getLowerProfile().getPosition()));
     
-    m_shuffleBoard.addNumber("Desired Upper Joint Angle", () -> m_robotContainer.getClimbSubsystem().getUpperProfile() == null ? -1 : 
-      m_robotContainer.getClimbSubsystem().getLowerProfile().getPosition());
     
-    m_shuffleBoard.addNumber("Desired Lower Joint Angular Velocity", () -> m_robotContainer.getClimbSubsystem().getLowerProfile() == null ? 0 : 
-      m_robotContainer.getClimbSubsystem().getLowerProfile().getVelocity());
-  
-    m_shuffleBoard.addNumber("Desired Upper Joint Angular Velocity", () -> m_robotContainer.getClimbSubsystem().getUpperProfile() == null ? 0 : 
-      m_robotContainer.getClimbSubsystem().getLowerProfile().getVelocity());
-    
-
-    m_shuffleBoard.addNumber("Gyro Angle", m_robotContainer.getGyro()::getAngle);
-
-    
-
   }
 
   /**
@@ -84,6 +59,8 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+    //System.out.println(Constants.CLIMB_LOWER_CLIMB_TO_IDLE_PROFILE.toString());
+
   }
 
   /**

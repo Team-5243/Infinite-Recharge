@@ -9,17 +9,17 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.lib.ConvertedXboxController;
-import frc.robot.subsystems.IntakeOuttakeSubsystem;
+import frc.robot.subsystems.OuttakeSubsystem;
 
 public class ConveyorIntakeCommand extends CommandBase {
-  private IntakeOuttakeSubsystem m_intakeOuttakeSubsystem;
+  private OuttakeSubsystem m_outtakeSubsystem;
   /**
    * Creates a new ConveyorCommand.
    */
-  public ConveyorIntakeCommand(IntakeOuttakeSubsystem subsystem) {
+  public ConveyorIntakeCommand(OuttakeSubsystem subsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_intakeOuttakeSubsystem = subsystem;
-    addRequirements(m_intakeOuttakeSubsystem);
+    m_outtakeSubsystem = subsystem;
+    addRequirements(m_outtakeSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -30,13 +30,13 @@ public class ConveyorIntakeCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_intakeOuttakeSubsystem.runConveyor(-0.7, 0.7);
+    m_outtakeSubsystem.conveyorIntake();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_intakeOuttakeSubsystem.stopConveyor();
+    m_outtakeSubsystem.stopConveyor();
   }
 
   // Returns true when the command should end.

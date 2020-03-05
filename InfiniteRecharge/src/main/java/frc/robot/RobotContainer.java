@@ -13,22 +13,20 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import frc.robot.commands.RollerCommand;
+import frc.robot.commands.ToggleIntakeCommand;
 import frc.lib.ConvertedXboxController;
-import frc.robot.commands.ArmStateControllerCommand;
 import frc.robot.commands.ConveyorIntakeCommand;
 import frc.robot.commands.ConveyorStuckCommand;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.FlywheelCommand;
 import frc.robot.commands.GeneralDriveCommand;
-import frc.robot.commands.ManualLowerJointCommand;
-import frc.robot.commands.ManualUpperJointCommand;
 import frc.robot.commands.ManualWinchControlCommand;
 import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.IntakeOuttakeSubsystem;
+import frc.robot.subsystems.OuttakeSubsystem;
+import frc.robot.subsystems.PneumaticIntakeSubsystem;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.WheelOfFortuneSubsystem;
-import frc.states.ClimbArmsStateMachine;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -49,9 +47,10 @@ public class RobotContainer {
 
   private final Superstructure m_superstructure = new Superstructure();
   
-  private final IntakeOuttakeSubsystem m_intakeOuttakeSubsystem = new IntakeOuttakeSubsystem();
+  private final OuttakeSubsystem m_outtakeSubsystem = new OuttakeSubsystem();
   private final DriveSubsystem m_driveSubsystem = new DriveSubsystem(this);
-  private final ClimbSubsystem m_climbSubsystem = new ClimbSubsystem(m_superstructure);
+  private final ClimbSubsystem m_climbSubsystem = new ClimbSubsystem();
+  private final PneumaticIntakeSubsystem m_pneumaticIntakeSubsystem = new PneumaticIntakeSubsystem();
 
   private final GeneralDriveCommand m_generalDriveCommand = new GeneralDriveCommand(m_driveSubsystem, m_driveSubsystem::getDrivePower, m_driveSubsystem::getSteerPower);
 
@@ -61,19 +60,16 @@ public class RobotContainer {
   //private final ManualJointCommand m_manualJointCommand = new ManualJointCommand(m_climbSubsystem, m_driverController.getXboxController());
 
   //private final ArmStateControllerCommand m_armStateControllerCommand = new ArmStateControllerCommand(m_climbSubsystemFinal);
-  // private final ManualLowerJointCommand m_raiseLowerJointCommand = new ManualLowerJointCommand(m_climbSubsystem, true);
-  // private final ManualUpperJointCommand m_raiseUpperJointCommand = new ManualUpperJointCommand(m_climbSubsystem, true);
-  // private final ManualLowerJointCommand m_lowerLowerJointCommand = new ManualLowerJointCommand(m_climbSubsystem, false);
-  // private final ManualUpperJointCommand m_lowerUpperJointCommand = new ManualUpperJointCommand(m_climbSubsystem, false);
-  
-  private final RollerCommand   m_rollerCommand   = new RollerCommand(m_intakeOuttakeSubsystem);
-  private final ConveyorIntakeCommand m_conveyorIntakeCommand = new ConveyorIntakeCommand(m_intakeOuttakeSubsystem);
-  private final ConveyorStuckCommand m_conveyorStuckCommand = new ConveyorStuckCommand(m_intakeOuttakeSubsystem);
-  private final FlywheelCommand m_flywheelCommand = new FlywheelCommand(m_intakeOuttakeSubsystem);
-
-  private final ArmStateControllerCommand m_armIntakeStateCommand = new ArmStateControllerCommand(m_climbSubsystem, ClimbArmsStateMachine.State.INTAKE);
-  private final ArmStateControllerCommand m_armClimbStateCommand  = new ArmStateControllerCommand(m_climbSubsystem, ClimbArmsStateMachine.State.CLIMB);
-  private final ArmStateControllerCommand m_armIdleStateCommand   = new ArmStateControllerCommand(m_climbSubsystem, ClimbArmsStateMachine.State.IDLE);
+ 
+  private final RollerCommand   m_rollerCommand   = new RollerCommand(m_pneumaticIntakeSubsystem, m_outtakeSubsystem);
+  private final ConveyorIntakeCommand m_conveyorIntakeCommand = new ConveyorIntakeCommand(m_outtakeSubsystem);
+  private final ConveyorStuckCommand m_conveyorStuckCommand = new ConveyorStuckCommand(m_outtakeSubsystem);
+  private final FlywheelCommand m_flywheelCommand = new FlywheelCommand(m_outtakeSubsystem);
+  private final ToggleIntakeCommand m_toggleIntakeCommand = new ToggleIntakeCommand(m_pneumaticIntakeSubsystem);
+  private final ManualWinchControlCommand m_winchControlCommand = new ManualWinchControlCommand(m_climbSubsystem, m_mechanismController.getXboxController());
+ // private final ArmStateControllerCommand m_armIntakeStateCommand = new ArmStateControllerCommand(m_climbSubsystem, ClimbArmsStateMachine.State.INTAKE);
+ // private final ArmStateControllerCommand m_armClimbStateCommand  = new ArmStateControllerCommand(m_climbSubsystem, ClimbArmsStateMachine.State.CLIMB);
+ // private final ArmStateControllerCommand m_armIdleStateCommand   = new ArmStateControllerCommand(m_climbSubsystem, ClimbArmsStateMachine.State.IDLE);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -90,23 +86,12 @@ public class RobotContainer {
    * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    //m_mechanismController.bButton.whenPressed(m_climbSubsystem::switchEnable);
-    //m_driverController.aButton.whenPressed(m_armStateControllerCommand);
-    //m_driverController.bButton.whenPressed(() -> ClimbArmsStateMachine.updateState(ClimbArmsStateMachine.State.INIT));
-    
     m_mechanismController.xButton.toggleWhenPressed(m_rollerCommand);
     m_mechanismController.rightBumper.whileHeld(m_conveyorIntakeCommand);
     m_mechanismController.leftBumper.whileHeld(m_conveyorStuckCommand);
-    //m_mechanismController.aButton.whileHeld(m_lowerLowerJointCommand);
-    //m_mechanismController.yButton.whileHeld(m_raiseLowerJointCommand);
+    m_mechanismController.aButton.whenPressed(m_toggleIntakeCommand);
 
-   // m_driverController.aButton.whileHeld(m_lowerUpperJointCommand);
-    //m_driverController.yButton.whileHeld(m_raiseUpperJointCommand);
     m_driverController.bButton.whileHeld(m_flywheelCommand);
-
-    m_mechanismController.aButton.whenPressed(m_armIntakeStateCommand);
-    m_mechanismController.bButton.whenPressed(m_armIdleStateCommand);
-    m_mechanismController.yButton.whenPressed(m_armClimbStateCommand);
   }
 
   // public ManualJointCommand getManualJointCommand() {
@@ -129,8 +114,8 @@ public class RobotContainer {
     return m_mechanismController;
   }
 
-  public IntakeOuttakeSubsystem getIntakeOutakeSubsystem() {
-    return null;//m_intakeOuttakeSubsystem;
+  public OuttakeSubsystem getOuttakeSubsystem() {
+    return m_outtakeSubsystem;
   }
 
   public DriveSubsystem getDriveSubsystem() {
@@ -159,6 +144,14 @@ public class RobotContainer {
 
   public ClimbSubsystem getClimbSubsystem() {
     return m_climbSubsystem;
+  }
+
+  public ManualWinchControlCommand getManualWinchControlCommand() {
+    return m_winchControlCommand;
+  }
+
+  public PneumaticIntakeSubsystem getPneumaticIntakeSubsystem(){
+    return m_pneumaticIntakeSubsystem;
   }
 }
 

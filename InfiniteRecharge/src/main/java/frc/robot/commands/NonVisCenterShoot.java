@@ -21,7 +21,7 @@ public class NonVisCenterShoot extends SequentialCommandGroup {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
     super(new DriveStraightCommand(m_robotContainer.getDriveSubsystem(), 1, 80), 
-          new FlywheelCommand(m_robotContainer.getIntakeOutakeSubsystem()),
+          new FlywheelCommand(m_robotContainer.getOuttakeSubsystem()),
           new DriveStraightCommand(m_robotContainer.getDriveSubsystem(), -1, 100));
   }
 }

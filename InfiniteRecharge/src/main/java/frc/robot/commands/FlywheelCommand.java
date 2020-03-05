@@ -8,16 +8,16 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.IntakeOuttakeSubsystem;
+import frc.robot.subsystems.OuttakeSubsystem;
 
 public class FlywheelCommand extends CommandBase {
-  private IntakeOuttakeSubsystem m_intakeOuttakeSubsystem;
+  private OuttakeSubsystem m_outtakeSubsystem;
   /**
    * Creates a new FlywheelCommand.
    */
-  public FlywheelCommand(IntakeOuttakeSubsystem subsystem) {
-    m_intakeOuttakeSubsystem = subsystem;
-    addRequirements(m_intakeOuttakeSubsystem);
+  public FlywheelCommand(OuttakeSubsystem subsystem) {
+    m_outtakeSubsystem = subsystem;
+    addRequirements(m_outtakeSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -28,14 +28,14 @@ public class FlywheelCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_intakeOuttakeSubsystem.outtake(-1);
+    m_outtakeSubsystem.outtake(-1);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_intakeOuttakeSubsystem.stopOuttake();
-    m_intakeOuttakeSubsystem.stopConveyor();
+    m_outtakeSubsystem.stopOuttake();
+    m_outtakeSubsystem.stopConveyor();
   }
 
   // Returns true when the command should end.
