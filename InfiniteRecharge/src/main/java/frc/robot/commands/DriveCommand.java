@@ -34,8 +34,8 @@ public class DriveCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double rightPower = clamp(-m_xboxController.getY(Hand.kLeft) + (Math.abs(m_xboxController.getX(Hand.kRight)) >= 0.15 ? m_xboxController.getX(Hand.kRight)*0.75 : 0), -1, 1);
-    double leftPower = clamp(-m_xboxController.getY(Hand.kLeft) -(Math.abs(m_xboxController.getX(Hand.kRight)) >= 0.15 ? m_xboxController.getX(Hand.kRight)*0.75 : 0), -1, 1);
+    double rightPower = clamp(m_xboxController.getY(Hand.kLeft) + (Math.abs(m_xboxController.getX(Hand.kRight)) >= 0.15 ? m_xboxController.getX(Hand.kRight)*0.75 : 0), -1, 1);
+    double leftPower = clamp(m_xboxController.getY(Hand.kLeft) -(Math.abs(m_xboxController.getX(Hand.kRight)) >= 0.15 ? m_xboxController.getX(Hand.kRight)*0.75 : 0), -1, 1);
 
     m_driveSubsystem.setMotors(rightPower, leftPower);
   }

@@ -18,7 +18,8 @@ import frc.robot.Constants;
 
 public class OuttakeSubsystem extends SubsystemBase {
   CANSparkMax leftFly, rightFly;
-  CANSparkMax m_rightConveyor, m_leftConveyor;
+  private CANSparkMax m_rightConveyor;
+  private CANSparkMax m_leftConveyor;
   
   public OuttakeSubsystem() {
     m_leftConveyor = new CANSparkMax(Constants.LEFT_CONVEYOR, MotorType.kBrushed);
@@ -37,7 +38,7 @@ public class OuttakeSubsystem extends SubsystemBase {
 
   public void runConveyor(double leftPower, double rightPower) {
     m_leftConveyor.set(leftPower);
-    m_rightConveyor.set(rightPower);
+    //m_rightConveyor.set(rightPower);
   }
 
   public void stopConveyor() {
@@ -46,18 +47,18 @@ public class OuttakeSubsystem extends SubsystemBase {
   
   public void outtake(double outSpeed){
     m_leftConveyor.set(0.7);
-    m_rightConveyor.set(0.7);
+    //m_rightConveyor.set(0.7);
     rightFly.set(outSpeed);
   }
 
   public void conveyorIntake() {
     m_leftConveyor.set(-0.5);
-    m_rightConveyor.set(-0.5);
+    //m_rightConveyor.set(-0.5);
   }
 
   public void unstuck() {
     m_leftConveyor.set(-0.5);
-    m_rightConveyor.set(0.5);
+    //m_rightConveyor.set(0.5);
   }
 
   public void stopOuttake() {

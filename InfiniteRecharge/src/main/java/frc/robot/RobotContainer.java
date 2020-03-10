@@ -58,10 +58,10 @@ public class RobotContainer {
 
   //private final ArmStateControllerCommand m_armStateControllerCommand = new ArmStateControllerCommand(m_climbSubsystemFinal);
  
-  private final RollerCommand   m_rollerCommand   = new RollerCommand(m_pneumaticIntakeSubsystem, m_outtakeSubsystem);
-  private final ConveyorIntakeCommand m_conveyorIntakeCommand = new ConveyorIntakeCommand(m_outtakeSubsystem);
-  private final ConveyorStuckCommand m_conveyorStuckCommand = new ConveyorStuckCommand(m_outtakeSubsystem);
-  private final FlywheelCommand m_flywheelCommand = new FlywheelCommand(m_outtakeSubsystem);
+  //private final RollerCommand   m_rollerCommand   = new RollerCommand(m_pneumaticIntakeSubsystem, m_outtakeSubsystem);
+  //private final ConveyorIntakeCommand m_conveyorIntakeCommand = new ConveyorIntakeCommand(m_outtakeSubsystem);
+  //private final ConveyorStuckCommand m_conveyorStuckCommand = new ConveyorStuckCommand(m_outtakeSubsystem);
+  //private final FlywheelCommand m_flywheelCommand = new FlywheelCommand(m_outtakeSubsystem);
   //private final ToggleIntakeCommand m_toggleIntakeCommand = new ToggleIntakeCommand(m_pneumaticIntakeSubsystem);
   private final ManualWinchControlCommand m_winchControlCommand = new ManualWinchControlCommand(m_climbSubsystem, m_mechanismController.getXboxController());
   private final ClimbCommand m_climbCommand = new ClimbCommand(m_climbSubsystem, m_mechanismController);
@@ -84,12 +84,12 @@ public class RobotContainer {
    * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    m_mechanismController.xButton.toggleWhenPressed(m_rollerCommand);
-    m_mechanismController.rightBumper.whileHeld(m_conveyorIntakeCommand);
-    m_mechanismController.leftBumper.whileHeld(m_conveyorStuckCommand);
+    //m_mechanismController.xButton.toggleWhenPressed(m_rollerCommand);
+    //m_mechanismController.rightBumper.whileHeld(m_conveyorIntakeCommand);
+    //m_mechanismController.leftBumper.whileHeld(m_conveyorStuckCommand);
     //m_mechanismController.aButton.whenPressed(m_toggleIntakeCommand);
 
-    m_driverController.bButton.whileHeld(m_flywheelCommand);
+    //m_driverController.bButton.whileHeld(m_flywheelCommand);
   }
   
   public AHRS getGyro() {
@@ -105,7 +105,7 @@ public class RobotContainer {
   }
 
   public OuttakeSubsystem getOuttakeSubsystem() {
-    return m_outtakeSubsystem;
+    return null; //m_outtakeSubsystem;
   }
 
   public DriveSubsystem getDriveSubsystem() {
@@ -117,7 +117,7 @@ public class RobotContainer {
   }
 
   public FlywheelCommand getFlyWheelCommand() {
-    return m_flywheelCommand;
+    return null; //m_flywheelCommand;
   }
 
   public RollerCommand getRollerCommand() {

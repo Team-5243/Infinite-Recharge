@@ -92,7 +92,7 @@ public final class Constants {
     public static final double CASCADE_CLIMB_GEAR_RATIO = 10d;
     public static final double CASCADE_CLIMB_ENCODER_PULSES_PER_REVOLUTION = NEO_ENCODER_PULSES_PER_REVOLUTION * CASCADE_CLIMB_GEAR_RATIO;
     public static final double CASCADE_CLIMB_ENCODER_PULSES_PER_INCH = CASCADE_CLIMB_ENCODER_PULSES_PER_REVOLUTION / (2 * Math.PI * CASCADE_SPOOL_RADIUS);
-
+    
     public static final double LOWER_BAR_MAX_ANGULAR_SPEED = 535d * Math.PI / 180d; //rad / s
     public static final double UPPER_BAR_MAX_ANGULAR_SPEED = 345d * Math.PI / 180d; //rad / s
 
