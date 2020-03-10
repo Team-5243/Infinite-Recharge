@@ -21,6 +21,6 @@ public class DriveToControlPanelCenter extends SequentialCommandGroup {
   public DriveToControlPanelCenter(RobotContainer m_robotContainer) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
-    super(new DriveStraightCommand(m_robotContainer.getDriveSubsystem(), -1, 80));
+    super(new DriveStraightCommand(m_robotContainer.getDriveSubsystem(), -1, 50));
   }
 }

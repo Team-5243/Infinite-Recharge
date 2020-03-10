@@ -21,7 +21,7 @@ import frc.robot.Constants;
 
 
 public class PneumaticIntakeSubsystem extends SubsystemBase {
-  private DoubleSolenoid m_leftSolenoid, m_rightSolenoid;
+  //private DoubleSolenoid m_leftSolenoid, m_rightSolenoid;
   private Compressor m_compressor;
   private CANSparkMax m_roller;
 
@@ -29,14 +29,13 @@ public class PneumaticIntakeSubsystem extends SubsystemBase {
    * Creates a new PneumaticIntakeSubsystem.
    */
   public PneumaticIntakeSubsystem() {
-    m_leftSolenoid = new DoubleSolenoid(0,1);
-    m_rightSolenoid = new DoubleSolenoid(0,1);
+    //m_leftSolenoid = new DoubleSolenoid(0,1);
+    //m_rightSolenoid = new DoubleSolenoid(0,1);
 
     m_roller = new CANSparkMax(Constants.ROLLER, MotorType.kBrushed);
-    
     try {
-			m_compressor = new Compressor();
-			m_compressor.start();
+			//m_compressor = new Compressor();
+			//m_compressor.start();
     } 
     catch (Exception e) {
 			e.printStackTrace();
@@ -51,7 +50,7 @@ public class PneumaticIntakeSubsystem extends SubsystemBase {
   public void stopIntake() {
     m_roller.set(0);
   }
-
+  /*
   public void toggleLeftSol() {
 		if (m_leftSolenoid.get().equals(Value.kReverse) || m_leftSolenoid.get().equals(Value.kOff)) {
 			m_leftSolenoid.set(Value.kForward);
@@ -100,6 +99,7 @@ public class PneumaticIntakeSubsystem extends SubsystemBase {
   public Compressor getCompressor() {
     return m_compressor;
   }
+  */
 
   @Override
   public void periodic() {

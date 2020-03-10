@@ -30,15 +30,15 @@ public class ToggleIntakeCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    pneumaticIntakeSubsystem.toggleLeftSol();
-    pneumaticIntakeSubsystem.toggleRightSol();
+    //pneumaticIntakeSubsystem.toggleLeftSol();
+    //pneumaticIntakeSubsystem.toggleRightSol();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    pneumaticIntakeSubsystem.setLeftSolenoid(Value.kOff);
-    pneumaticIntakeSubsystem.setRightSolenoid(Value.kOff);
+    //pneumaticIntakeSubsystem.setLeftSolenoid(Value.kOff);
+    //pneumaticIntakeSubsystem.setRightSolenoid(Value.kOff);
   }
 
   // Returns true when the command should end.

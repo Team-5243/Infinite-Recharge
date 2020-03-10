@@ -16,6 +16,8 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardComponent;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.DriveStraightCommand;
+import frc.robot.commands.DriveToControlPanelCenter;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -36,13 +38,16 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
-    // autonomous chooser on the dashboard.
+    //To anyone reading this code, do not edit this unless 100% aware of the changes being made -Rudo
     m_robotContainer = new RobotContainer();
-    m_robotContainer.getPneumaticIntakeSubsystem().setClosedLoopControl(true);
-    
-    
-    
+
+    //m_robotContainer.getPneumaticIntakeSubsystem().setClosedLoopControl(true);
+    m_robotContainer.getVisionSubsystem().setLed(1);
+
+    CommandScheduler.getInstance().setDefaultCommand(m_robotContainer.getDriveSubsystem(), m_robotContainer.getDriveCommand());
+    CommandScheduler.getInstance().setDefaultCommand(m_robotContainer.getClimbSubsystem(), m_robotContainer.getClimbCommand());
+
+    //m_shuffleBoard.addNumber("Climb Position", m_robotContainer.getClimbSubsystem()::getClimbPosition);
   }
 
   /**
@@ -59,8 +64,6 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
-    //System.out.println(Constants.CLIMB_LOWER_CLIMB_TO_IDLE_PROFILE.toString());
-
   }
 
   /**
@@ -68,6 +71,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void disabledInit() {
+    //m_robotContainer.getPneumaticIntakeSubsystem().disableCompressor();
   }
 
   @Override
@@ -79,8 +83,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = null;
-
+    m_autonomousCommand = new DriveStraightCommand(m_robotContainer.getDriveSubsystem(), 0.65, 80);
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();

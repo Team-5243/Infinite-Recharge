@@ -32,7 +32,7 @@ public class OuttakeSubsystem extends SubsystemBase {
     leftFly.setIdleMode(IdleMode.kCoast);
     rightFly.setIdleMode(IdleMode.kCoast);
 
-    leftFly.follow(rightFly, true);
+    leftFly.follow(rightFly, false);
   }
 
   public void runConveyor(double leftPower, double rightPower) {

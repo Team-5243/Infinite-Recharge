@@ -46,33 +46,33 @@ public final class Constants {
     //---------------------------------------------------------------
     // Drive Ports
     //---------------------------------------------------------------
-    public static final int FRONT_RIGHT = 10;
-    public static final int FRONT_LEFT = 11;
-    public static final int BACK_LEFT = 2;
-    public static final int BACK_RIGHT = 1;
+    public static final int FRONT_RIGHT = 12;
+    public static final int FRONT_LEFT = 15;
+    public static final int BACK_LEFT = 10;
+    public static final int BACK_RIGHT = 3;
 
     //---------------------------------------------------------------
     // Intake Ports
     //---------------------------------------------------------------
-    public static final int ROLLER = 7;
+    public static final int ROLLER = 8;
     public static final int RIGHT_CONVEYOR = 4;
-    public static final int LEFT_CONVEYOR = 12;
+    public static final int LEFT_CONVEYOR = 1;
 
     //---------------------------------------------------------------
     // Outtake Ports
     //---------------------------------------------------------------
-    public static final int LEFT_FLY = 8; 
-    public static final int RIGHT_FLY = 9; 
+    public static final int LEFT_FLY = 9; 
+    public static final int RIGHT_FLY = 7; 
 
     //---------------------------------------------------------------
     // Climb Ports
     //---------------------------------------------------------------
-    public static final int LOWER_CLIMB_JOINT = 5;
-    public static final int UPPER_CLIMB_JOINT = 6;
-    public static final int FRONT_WINCH_CLIMB = 3;
-    public static final int BACK_WINCH_CLIMB = 15;
+    //public static final int LOWER_CLIMB_JOINT = 5;
+    //public static final int UPPER_CLIMB_JOINT = 6;
+    public static final int FRONT_WINCH_CLIMB = 6;
+    public static final int BACK_WINCH_CLIMB = 11;
 
-    public static final int CLIMB = UPPER_CLIMB_JOINT;
+    public static final int CLIMB = 5;
 
     //---------------------------------------------------------------
     // Climb Constants
@@ -88,13 +88,18 @@ public final class Constants {
     public static final double WINCH_CLIMB_ENCODER_PULSES_PER_REVOLUTION = NEO_ENCODER_PULSES_PER_REVOLUTION * WINCH_CLIMB_GEAR_RATIO; //enc / rev
     public static final double WINCH_CLIMB_ENCODER_PULSES_PER_INCH = WINCH_CLIMB_ENCODER_PULSES_PER_REVOLUTION / (2 * Math.PI * WINCH_RADIUS); //enc / in
 
+    public static final double CASCADE_SPOOL_RADIUS = 1d;
+    public static final double CASCADE_CLIMB_GEAR_RATIO = 10d;
+    public static final double CASCADE_CLIMB_ENCODER_PULSES_PER_REVOLUTION = NEO_ENCODER_PULSES_PER_REVOLUTION * CASCADE_CLIMB_GEAR_RATIO;
+    public static final double CASCADE_CLIMB_ENCODER_PULSES_PER_INCH = CASCADE_CLIMB_ENCODER_PULSES_PER_REVOLUTION / (2 * Math.PI * CASCADE_SPOOL_RADIUS);
+
     public static final double LOWER_BAR_MAX_ANGULAR_SPEED = 535d * Math.PI / 180d; //rad / s
     public static final double UPPER_BAR_MAX_ANGULAR_SPEED = 345d * Math.PI / 180d; //rad / s
 
     public static final double LOWER_BAR_MAX_ANGULAR_ACCELERATION = 1000d * Math.PI / 180d; //rad / s^2
     public static final double UPPER_BAR_MAX_ANGULAR_ACCELERATION = 600d * Math.PI / 180d; //rad / s^2
 
-    public static final double kP_CLIMB_WINCH_SYNCHRONIZE = 0d;//0.001d; //motor power / in
+    public static final double kP_CLIMB_WINCH_SYNCHRONIZE = 0.01d;//0.001d; //motor power / in
     public static final double kI_CLIMB_WINCH_SYNCHRONIZE = 0d; //motor power / (in * s)
     public static final double kD_CLIMB_WINCH_SYNCHRONIZE = 0d; //motor power * s / in
 

@@ -37,7 +37,7 @@ public class DriveStraightCommand extends CommandBase {
   public void execute() {
     double heading      = m_gyro.getAngle();
     double headingError = m_initialHeading - heading;
-    m_driveSubsystem.steerDrive(m_power, Constants.kP_DRIVE_STRAIGHT * headingError);   
+    m_driveSubsystem.setMotors(m_power, m_power); 
   }
 
   // Called once the command ends or is interrupted.
@@ -49,6 +49,7 @@ public class DriveStraightCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    System.out.println("Current Travel: "+(m_driveSubsystem.getLeftDisplacement() - m_initialLateralPosition));  
     return (m_driveSubsystem.getLeftDisplacement()/*getPose().getTranslation().getX()*/ - m_initialLateralPosition) >= m_distance;
   }
 }

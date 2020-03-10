@@ -33,15 +33,15 @@ public class ManualWinchControlCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_climbSubsystem.manuallyControlLowerWinch(-0.5*(m_controller.getY(Hand.kRight)));
-    m_climbSubsystem.manuallyControlUpperWinch(-0.5*(m_controller.getY(Hand.kLeft)));
+    m_climbSubsystem.manuallyControlFrontWinch(-0.5*(m_controller.getY(Hand.kRight)));
+    m_climbSubsystem.manuallyControlBackWinch(-0.5*(m_controller.getY(Hand.kLeft)));
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_climbSubsystem.manuallyControlUpperWinch(0);
-    m_climbSubsystem.manuallyControlLowerWinch(0);
+    m_climbSubsystem.manuallyControlFrontWinch(0);
+    m_climbSubsystem.manuallyControlBackWinch(0);
   }
 
   // Returns true when the command should end.

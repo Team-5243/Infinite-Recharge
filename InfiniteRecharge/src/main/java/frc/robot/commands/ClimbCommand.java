@@ -7,23 +7,22 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.DriveSubsystem;
+import frc.lib.ConvertedXboxController;
+import frc.robot.subsystems.ClimbSubsystem;
 
-public class DriveCommand extends CommandBase {
-  final private DriveSubsystem m_driveSubsystem;
-  final private XboxController m_xboxController;
-
+public class ClimbCommand extends CommandBase {
+  private ClimbSubsystem m_climbSubsystem;
+  private ConvertedXboxController m_controller;
   /**
-   * Creates a new DriveCommand.
+   * Creates a new ClimbCommand.
    */
-  public DriveCommand(DriveSubsystem subsystem, XboxController controller) {
-    m_driveSubsystem = subsystem;
-    m_xboxController = controller;
-    addRequirements(m_driveSubsystem);
+  public ClimbCommand(ClimbSubsystem subsystem, ConvertedXboxController controller) {
     // Use addRequirements() here to declare subsystem dependencies.
+    m_climbSubsystem = subsystem;
+    m_controller = controller;
+    addRequirements(m_climbSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -34,25 +33,25 @@ public class DriveCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double rightPower = clamp(-m_xboxController.getY(Hand.kLeft) + (Math.abs(m_xboxController.getX(Hand.kRight)) >= 0.15 ? m_xboxController.getX(Hand.kRight)*0.75 : 0), -1, 1);
-    double leftPower = clamp(-m_xboxController.getY(Hand.kLeft) -(Math.abs(m_xboxController.getX(Hand.kRight)) >= 0.15 ? m_xboxController.getX(Hand.kRight)*0.75 : 0), -1, 1);
+    m_climbSubsystem.setClimb(-(m_controller.getXboxController().getTriggerAxis(Hand.kRight) - m_controller.getXboxController().getTriggerAxis(Hand.kLeft)) / 4d);
+    m_climbSubsystem.manuallyControlBackWinch(-0.5*(m_controller.getXboxController().getY(Hand.kRight)));
+    m_climbSubsystem.manuallyControlFrontWinch(-0.5*(m_controller.getXboxController().getY(Hand.kLeft)));
 
-    m_driveSubsystem.setMotors(rightPower, leftPower);
+    //18 in horizontal bar -> 18 * 7 / 12 = 10.5 oz
+    //18.75 in vertical stage -> 18.75 * 7 / 12 = 10.9 oz
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_driveSubsystem.stopMotors();
+    m_climbSubsystem.stopClimb();
+    m_climbSubsystem.manuallyControlBackWinch(0);
+    m_climbSubsystem.manuallyControlFrontWinch(0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return false;
-  }
-
-  private double clamp(double val, double min, double max) {
-    return Math.max(Math.min(max, val), min);
   }
 }
