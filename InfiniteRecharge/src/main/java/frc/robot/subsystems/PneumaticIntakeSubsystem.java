@@ -26,7 +26,7 @@ public class PneumaticIntakeSubsystem extends SubsystemBase {
   private CANSparkMax m_roller;
 
   /**
-   * Creates a new PneumaticIntakeSubsystem.
+   * Creates a new PneumaticIntakeSubsystem.  
    */
   public PneumaticIntakeSubsystem() {
     //m_leftSolenoid = new DoubleSolenoid(0,1);

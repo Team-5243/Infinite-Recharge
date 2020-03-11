@@ -38,7 +38,7 @@ public class OuttakeSubsystem extends SubsystemBase {
 
   public void runConveyor(double leftPower, double rightPower) {
     m_leftConveyor.set(leftPower);
-    //m_rightConveyor.set(rightPower);
+    m_rightConveyor.set(rightPower);
   }
 
   public void stopConveyor() {
@@ -47,18 +47,18 @@ public class OuttakeSubsystem extends SubsystemBase {
   
   public void outtake(double outSpeed){
     m_leftConveyor.set(0.7);
-    //m_rightConveyor.set(0.7);
+    m_rightConveyor.set(0.7);
     rightFly.set(outSpeed);
   }
 
   public void conveyorIntake() {
     m_leftConveyor.set(-0.5);
-    //m_rightConveyor.set(-0.5);
+    m_rightConveyor.set(-0.5);
   }
 
   public void unstuck() {
     m_leftConveyor.set(-0.5);
-    //m_rightConveyor.set(0.5);
+    m_rightConveyor.set(0.5);
   }
 
   public void stopOuttake() {
@@ -68,6 +68,7 @@ public class OuttakeSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    System.out.println("Conveyor Power: " + "Left: " + m_leftConveyor.get() +" Right: " + m_rightConveyor.get());
+    m_rightConveyor.set(1);
   }
 }

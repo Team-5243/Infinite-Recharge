@@ -43,13 +43,6 @@ public class ClimbSubsystem extends SubsystemBase {
   //TODO: Check if the use of radians/degrees is correct throughout the code
   @Override
   public void periodic() {
-    if(climb.getIdleMode().equals(IdleMode.kCoast)) {
-      System.out.println("Coasting");
-    } else if(climb.getIdleMode().equals(IdleMode.kBrake)) {
-      System.out.println("Brake");
-    } else {
-      System.out.println("Oh god no");
-    }
   }
 
   public double getFrontWinchPosition() {
