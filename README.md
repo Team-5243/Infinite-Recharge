@@ -1,3 +1,2 @@
-# Infinite-Recharge
-The official GitHub repository of Team 5243 for the FRC 2020 season - Infinite Recharge
-test
+# Infinite Recharge
+The Official GitHub Repository of FRC Team 5243 (Aegis Robotics) for FIRST Infinite Recharge (2021 & 2022)
